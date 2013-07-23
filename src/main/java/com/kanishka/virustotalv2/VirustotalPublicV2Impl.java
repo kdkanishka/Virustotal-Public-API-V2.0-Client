@@ -19,7 +19,9 @@ import com.kanishka.virustotal.exception.InvalidArguentsException;
 import com.kanishka.virustotal.exception.QuotaExceededException;
 import com.kanishka.virustotal.exception.UnauthorizedAccessException;
 import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_FILE_SCAN;
+import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_FILE_SCAN_REPORT;
 import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_RESCAN;
+import static com.kanishka.virustotalv2.VirustotalPublicV2.VT2_MAX_ALLOWED_URLS_PER_REQUEST;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import org.apache.http.entity.mime.content.FileBody;
@@ -212,8 +214,47 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public FileScanReport[] getUrlScanReport(String[] url, boolean scan) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public FileScanReport[] getUrlScanReport(String[] urls, boolean scan) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception {
+        FileScanReport[] fileScanReport = null;
+        if (urls == null) {
+            throw new InvalidArguentsException("Incorrect parameter \'resources\', resource should be an array with at least one element");
+        }else if (urls.length > VT2_MAX_ALLOWED_URLS_PER_REQUEST) {
+            throw new InvalidArguentsException("Incorrect parameter \'urls\' , maximum number(" + VT2_MAX_ALLOWED_URLS_PER_REQUEST + ") of urls per request has been exceeded.");
+        }
+        HTTPRequest req = new BasicHTTPRequestImpl();
+        req.setMethod(RequestMethod.POST);
+        MultiPartEntity apikey = new MultiPartEntity("apikey", new StringBody(_apiKey));
+        req.addPart(apikey);
+        StringBuilder resourceStr = new StringBuilder();
+        for (String resource : urls) {
+            resourceStr.append(resource).append(", ");
+        }
+        //clean up resource string
+        int lastCommaIdx = resourceStr.lastIndexOf(",");
+        if (lastCommaIdx > 0) {
+            resourceStr.deleteCharAt(lastCommaIdx);
+        }
+
+        MultiPartEntity part = new MultiPartEntity("resource", new StringBody(resourceStr.toString()));
+        req.addPart(part);
+        if (scan) {
+            MultiPartEntity scanPart = new MultiPartEntity("scan", new StringBody("1"));
+            req.addPart(scanPart);
+        }
+        req.request(URI_VT2_URL_SCAN_REPORT);
+        int statusCode = req.getStatus();
+        if (statusCode == 403) {
+            //fobidden
+            throw new UnauthorizedAccessException("Invalid api key");
+        } else if (statusCode == 204) {
+            //limit exceeded
+            throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
+        } else if (statusCode == 200) {
+            //valid response
+            String serviceResponse = req.getResponse();
+            fileScanReport = gsonProcessor.fromJson(serviceResponse, FileScanReport[].class);
+        }
+        return fileScanReport;
     }
 
     @Override

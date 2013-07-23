@@ -24,6 +24,7 @@ public interface VirustotalPublicV2 {
     final String URI_VT2_RESCAN = "https://www.virustotal.com/vtapi/v2/file/rescan";
     final String URI_VT2_FILE_SCAN_REPORT = "https://www.virustotal.com/vtapi/v2/file/report";
     final String URI_VT2_URL_SCAN = "https://www.virustotal.com/vtapi/v2/url/scan";
+    final String URI_VT2_URL_SCAN_REPORT = "http://www.virustotal.com/vtapi/v2/url/report";
     final String URI_VT2_IP_REPORT = "http://www.virustotal.com/vtapi/v2/ip-address/report";
     final String URI_VT2_DOMAIN_REPORT = "http://www.virustotal.com/vtapi/v2/domain/report";
     final String URI_VT2_PUT_COMMENT = "https://www.virustotal.com/vtapi/v2/comments/put";
@@ -80,7 +81,7 @@ public interface VirustotalPublicV2 {
      * @param scan : true if url s must be scanned before generating the report
      * @return
      */
-    FileScanReport[] getUrlScanReport(final String[] url, boolean scan);
+    FileScanReport[] getUrlScanReport(final String[] url, boolean scan)throws UnsupportedEncodingException, UnauthorizedAccessException, Exception ;
 
     /**
      *
