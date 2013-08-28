@@ -4,7 +4,7 @@
  */
 package com.kanishka.virustotalv2;
 
-import com.kanishka.virustotal.dto.domain.DomainReport;
+import com.kanishka.virustotal.dto.DomainReport;
 import com.kanishka.virustotal.dto.FileScanReport;
 import com.kanishka.virustotal.dto.GeneralResponse;
 import com.kanishka.virustotal.dto.IPAddressReport;
@@ -88,7 +88,7 @@ public interface VirustotalPublicV2 {
      * @param ipAddress
      * @return
      */
-    IPAddressReport getIPAddresReport(final String ipAddress);
+    IPAddressReport getIPAddresReport(final String ipAddress) throws InvalidArguentsException, Exception;
 
     /**
      *

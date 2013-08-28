@@ -9,7 +9,7 @@ import com.kanishka.net.commons.BasicHTTPRequestImpl;
 import com.kanishka.net.commons.HTTPRequest;
 import com.kanishka.net.model.MultiPartEntity;
 import com.kanishka.net.model.RequestMethod;
-import com.kanishka.virustotal.dto.domain.DomainReport;
+import com.kanishka.virustotal.dto.DomainReport;
 import com.kanishka.virustotal.dto.FileScanReport;
 import com.kanishka.virustotal.dto.GeneralResponse;
 import com.kanishka.virustotal.dto.IPAddressReport;
@@ -18,6 +18,7 @@ import com.kanishka.virustotal.exception.APIKeyNotFoundException;
 import com.kanishka.virustotal.exception.InvalidArguentsException;
 import com.kanishka.virustotal.exception.QuotaExceededException;
 import com.kanishka.virustotal.exception.UnauthorizedAccessException;
+import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_DOMAIN_REPORT;
 import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_FILE_SCAN;
 import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_FILE_SCAN_REPORT;
 import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_RESCAN;
@@ -258,21 +259,41 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public IPAddressReport getIPAddresReport(String ipAddress) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public IPAddressReport getIPAddresReport(String ipAddress) throws InvalidArguentsException, Exception {
+        IPAddressReport ipReport = new IPAddressReport();
+        if (ipAddress == null) {
+            throw new InvalidArguentsException("Incorrect parameter \'ipAddress\', resource should be an array with at least one element");
+        }
+        HTTPRequest req = new BasicHTTPRequestImpl();
+        req.setMethod(RequestMethod.GET);
+        String uriWithParams = URI_VT2_IP_REPORT + "?apikey=" + _apiKey + "&ip=" + ipAddress;
+        req.request(uriWithParams);
+        int statusCode = req.getStatus();
+        if (statusCode == 403) {
+            //fobidden
+            throw new UnauthorizedAccessException("Invalid api key");
+        } else if (statusCode == 204) {
+            //limit exceeded
+            throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
+        } else if (statusCode == 200) {
+            //valid response
+            String serviceResponse = req.getResponse();
+            ipReport = gsonProcessor.fromJson(serviceResponse, IPAddressReport.class);
+        }
+        return ipReport;
     }
 
     @Override
     public DomainReport getDomainReport(String domain) throws InvalidArguentsException, Exception {
         DomainReport domainReport = new DomainReport();
         if (domain == null) {
-            throw new InvalidArguentsException("Incorrect parameter \'resources\', resource should be an array with at least one element");
+            throw new InvalidArguentsException("Incorrect parameter \'domain\', resource should be an array with at least one element");
         }
         HTTPRequest req = new BasicHTTPRequestImpl();
         req.setMethod(RequestMethod.GET);
-        String uriWithParams=URI_VT2_DOMAIN_REPORT+"?apikey="+_apiKey+"&domain="+domain;
-        req.request(uriWithParams); 
-        
+        String uriWithParams = URI_VT2_DOMAIN_REPORT + "?apikey=" + _apiKey + "&domain=" + domain;
+        req.request(uriWithParams);
+
         int statusCode = req.getStatus();
         if (statusCode == 403) {
             //fobidden
@@ -285,8 +306,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             String serviceResponse = req.getResponse();
             domainReport = gsonProcessor.fromJson(serviceResponse, DomainReport.class);
         }
-        
-        
         return domainReport;
     }
 

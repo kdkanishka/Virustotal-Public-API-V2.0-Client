@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.kanishka.virustotal.dto.domain;
+package com.kanishka.virustotal.dto;
 
-import java.util.HashMap;
+import com.kanishka.virustotal.dto.Sample;
+import com.kanishka.virustotal.dto.Resolution;
 
 /**
  *
