@@ -103,5 +103,5 @@ public interface VirustotalPublicV2 {
      * @param comment
      * @return
      */
-    GeneralResponse makeAComment(final String resource, final String comment);
+    GeneralResponse makeAComment(final String resource, final String comment) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception;
 }

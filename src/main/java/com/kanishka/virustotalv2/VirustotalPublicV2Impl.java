@@ -262,7 +262,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     public IPAddressReport getIPAddresReport(String ipAddress) throws InvalidArguentsException, Exception {
         IPAddressReport ipReport = new IPAddressReport();
         if (ipAddress == null) {
-            throw new InvalidArguentsException("Incorrect parameter \'ipAddress\', resource should be an array with at least one element");
+            throw new InvalidArguentsException("Incorrect parameter \'ipAddress\', it should be a valid IP address ");
         }
         HTTPRequest req = new BasicHTTPRequestImpl();
         req.setMethod(RequestMethod.GET);
@@ -287,7 +287,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     public DomainReport getDomainReport(String domain) throws InvalidArguentsException, Exception {
         DomainReport domainReport = new DomainReport();
         if (domain == null) {
-            throw new InvalidArguentsException("Incorrect parameter \'domain\', resource should be an array with at least one element");
+            throw new InvalidArguentsException("Incorrect parameter \'domain\', it should be a valid domain name");
         }
         HTTPRequest req = new BasicHTTPRequestImpl();
         req.setMethod(RequestMethod.GET);
@@ -310,7 +310,35 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public GeneralResponse makeAComment(String resource, String comment) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public GeneralResponse makeAComment(String resource, String comment) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception {
+        if (resource == null || resource.length() == 0) {
+            throw new InvalidArguentsException("Incorrect parameter \'resource\', it should be a string representing a hash value (md2,sha1,sha256)");
+        }
+        GeneralResponse generalResponse = new GeneralResponse();
+        generalResponse.setResponse_code(-1);
+        generalResponse.setVerbose_msg("Could not publish the comment, API error occured!");
+        HTTPRequest req = new BasicHTTPRequestImpl();
+        req.setMethod(RequestMethod.POST);
+
+        MultiPartEntity apikey = new MultiPartEntity("apikey", new StringBody(_apiKey));
+        MultiPartEntity resourcePart = new MultiPartEntity("resource", new StringBody(resource));
+        MultiPartEntity commentPart = new MultiPartEntity("comment", new StringBody(comment));
+        req.addPart(apikey);
+        req.addPart(resourcePart);
+        req.addPart(commentPart);
+        req.request(URI_VT2_PUT_COMMENT);
+        int statusCode = req.getStatus();
+        if (statusCode == 403) {
+            //fobidden
+            throw new UnauthorizedAccessException("Invalid api key");
+        } else if (statusCode == 204) {
+            //limit exceeded
+            throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
+        } else if (statusCode == 200) {
+            //valid response
+            String serviceResponse = req.getResponse();
+            generalResponse = gsonProcessor.fromJson(serviceResponse, GeneralResponse.class);
+        }
+        return generalResponse;
     }
 }
