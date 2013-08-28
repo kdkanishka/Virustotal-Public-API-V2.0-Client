@@ -5,8 +5,8 @@
 package com.kanishka.virustotalv2;
 
 import com.google.gson.Gson;
-import com.kani.net.BasicHTTPRequestImpl;
-import com.kani.net.HTTPRequest;
+import com.kanishka.net.commons.BasicHTTPRequestImpl;
+import com.kanishka.net.commons.HTTPRequest;
 import com.kanishka.net.model.MultiPartEntity;
 import com.kanishka.net.model.RequestMethod;
 import com.kanishka.virustotal.dto.DomainReport;

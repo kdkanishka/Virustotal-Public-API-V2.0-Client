@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.kani.net;
+package com.kanishka.net.commons;
 
 import com.kanishka.net.exception.RequestNotComplete;
 import com.kanishka.net.model.FormData;
