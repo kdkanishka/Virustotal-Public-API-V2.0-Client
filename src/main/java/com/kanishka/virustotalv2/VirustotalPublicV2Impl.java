@@ -9,7 +9,7 @@ import com.kanishka.net.commons.BasicHTTPRequestImpl;
 import com.kanishka.net.commons.HTTPRequest;
 import com.kanishka.net.model.MultiPartEntity;
 import com.kanishka.net.model.RequestMethod;
-import com.kanishka.virustotal.dto.DomainReport;
+import com.kanishka.virustotal.dto.domain.DomainReport;
 import com.kanishka.virustotal.dto.FileScanReport;
 import com.kanishka.virustotal.dto.GeneralResponse;
 import com.kanishka.virustotal.dto.IPAddressReport;
@@ -218,7 +218,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         FileScanReport[] fileScanReport = null;
         if (urls == null) {
             throw new InvalidArguentsException("Incorrect parameter \'resources\', resource should be an array with at least one element");
-        }else if (urls.length > VT2_MAX_ALLOWED_URLS_PER_REQUEST) {
+        } else if (urls.length > VT2_MAX_ALLOWED_URLS_PER_REQUEST) {
             throw new InvalidArguentsException("Incorrect parameter \'urls\' , maximum number(" + VT2_MAX_ALLOWED_URLS_PER_REQUEST + ") of urls per request has been exceeded.");
         }
         HTTPRequest req = new BasicHTTPRequestImpl();
@@ -263,8 +263,31 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public DomainReport getDomainReport(String domain) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public DomainReport getDomainReport(String domain) throws InvalidArguentsException, Exception {
+        DomainReport domainReport = new DomainReport();
+        if (domain == null) {
+            throw new InvalidArguentsException("Incorrect parameter \'resources\', resource should be an array with at least one element");
+        }
+        HTTPRequest req = new BasicHTTPRequestImpl();
+        req.setMethod(RequestMethod.GET);
+        String uriWithParams=URI_VT2_DOMAIN_REPORT+"?apikey="+_apiKey+"&domain="+domain;
+        req.request(uriWithParams); 
+        
+        int statusCode = req.getStatus();
+        if (statusCode == 403) {
+            //fobidden
+            throw new UnauthorizedAccessException("Invalid api key");
+        } else if (statusCode == 204) {
+            //limit exceeded
+            throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
+        } else if (statusCode == 200) {
+            //valid response
+            String serviceResponse = req.getResponse();
+            domainReport = gsonProcessor.fromJson(serviceResponse, DomainReport.class);
+        }
+        
+        
+        return domainReport;
     }
 
     @Override

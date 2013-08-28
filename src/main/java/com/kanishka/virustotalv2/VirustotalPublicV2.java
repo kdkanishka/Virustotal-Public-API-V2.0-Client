@@ -4,7 +4,7 @@
  */
 package com.kanishka.virustotalv2;
 
-import com.kanishka.virustotal.dto.DomainReport;
+import com.kanishka.virustotal.dto.domain.DomainReport;
 import com.kanishka.virustotal.dto.FileScanReport;
 import com.kanishka.virustotal.dto.GeneralResponse;
 import com.kanishka.virustotal.dto.IPAddressReport;
@@ -81,7 +81,7 @@ public interface VirustotalPublicV2 {
      * @param scan : true if url s must be scanned before generating the report
      * @return
      */
-    FileScanReport[] getUrlScanReport(final String[] url, boolean scan)throws UnsupportedEncodingException, UnauthorizedAccessException, Exception ;
+    FileScanReport[] getUrlScanReport(final String[] url, boolean scan) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception;
 
     /**
      *
@@ -95,7 +95,7 @@ public interface VirustotalPublicV2 {
      * @param domain : domain name
      * @return
      */
-    DomainReport getDomainReport(final String domain);
+    DomainReport getDomainReport(final String domain) throws InvalidArguentsException, UnauthorizedAccessException, Exception;
 
     /**
      *

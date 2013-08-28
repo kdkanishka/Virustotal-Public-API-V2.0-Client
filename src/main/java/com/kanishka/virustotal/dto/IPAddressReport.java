@@ -9,4 +9,5 @@ package com.kanishka.virustotal.dto;
  * @author kdkanishka@gmail.com
  */
 public class IPAddressReport {
+    
 }
