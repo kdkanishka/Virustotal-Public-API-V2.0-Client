@@ -6,7 +6,7 @@ package com.kanishka.virustotal.dto.domain;
 
 /**
  *
- * @author kdesilva
+ * @author kdkanishka@gmail.com
  */
 public class URL {
     private String url;

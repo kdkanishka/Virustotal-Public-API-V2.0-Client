@@ -6,7 +6,7 @@ package com.kanishka.virustotal.dto.domain;
 
 /**
  *
- * @author kdesilva
+ * @author kdkanishka@gmail.com
  */
 public class Resolution {
     private String last_resolved;
