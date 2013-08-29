@@ -4,9 +4,6 @@
  */
 package com.kanishka.virustotal.dto;
 
-import com.kanishka.virustotal.dto.Sample;
-import com.kanishka.virustotal.dto.Resolution;
-
 /**
  *
  * @author kdkanishka@gmail.com

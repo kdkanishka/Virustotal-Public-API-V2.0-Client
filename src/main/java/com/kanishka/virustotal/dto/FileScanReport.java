@@ -5,7 +5,6 @@
 package com.kanishka.virustotal.dto;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  *
