@@ -16,6 +16,7 @@ public class HttpBinResponse {
     private HashMap<String, String> args;
     private String origin;
     private HashMap<String, String> headers;
+    private HashMap<String, String> form;
 
     public String getUrl() {
         return url;
@@ -47,5 +48,13 @@ public class HttpBinResponse {
 
     public void setHeaders(HashMap<String, String> headers) {
         this.headers = headers;
+    }
+
+    public HashMap<String, String> getForm() {
+        return form;
+    }
+
+    public void setForm(HashMap<String, String> form) {
+        this.form = form;
     }
 }
