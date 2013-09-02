@@ -52,7 +52,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         ScanInfo scanInfo = new ScanInfo();
         HTTPRequest req = new BasicHTTPRequestImpl();
         req.setMethod(RequestMethod.POST);
-        FileBody fileBody = new FileBody(new File("/Users/kdesilva/Desktop/eicar.com"));
+        FileBody fileBody = new FileBody(fileToScan);
         MultiPartEntity file = new MultiPartEntity("file", fileBody);
         MultiPartEntity apikey = new MultiPartEntity("apikey", new StringBody(_apiKey));
         req.addPart(file);
