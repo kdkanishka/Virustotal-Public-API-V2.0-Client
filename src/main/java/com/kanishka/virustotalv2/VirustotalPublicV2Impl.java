@@ -59,13 +59,13 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         req.addPart(apikey);
         req.request(URI_VT2_FILE_SCAN);
         int statusCode = req.getStatus();
-        if (statusCode == 403) {
+        if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException("Invalid api key");
-        } else if (statusCode == 204) {
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
             throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
-        } else if (statusCode == 200) {
+        } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
             scanInfo = gsonProcessor.fromJson(serviceResponse, ScanInfo.class);
@@ -97,13 +97,13 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         req.addPart(part);
         req.request(URI_VT2_RESCAN);
         int statusCode = req.getStatus();
-        if (statusCode == 403) {
+        if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException("Invalid api key");
-        } else if (statusCode == 204) {
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
             throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
-        } else if (statusCode == 200) {
+        } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
             scanInfo = gsonProcessor.fromJson(serviceResponse, ScanInfo[].class);
@@ -122,13 +122,13 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         req.addPart(resourcePart);
         req.request(URI_VT2_FILE_SCAN_REPORT);
         int statusCode = req.getStatus();
-        if (statusCode == 403) {
+        if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException("Invalid api key");
-        } else if (statusCode == 204) {
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
             throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
-        } else if (statusCode == 200) {
+        } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
             fileScanReport = gsonProcessor.fromJson(serviceResponse, FileScanReport.class);
@@ -160,13 +160,13 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         req.addPart(part);
         req.request(URI_VT2_FILE_SCAN_REPORT);
         int statusCode = req.getStatus();
-        if (statusCode == 403) {
+        if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException("Invalid api key");
-        } else if (statusCode == 204) {
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
             throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
-        } else if (statusCode == 200) {
+        } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
             fileScanReport = gsonProcessor.fromJson(serviceResponse, FileScanReport[].class);
@@ -200,13 +200,13 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         req.addPart(part);
         req.request(URI_VT2_URL_SCAN);
         int statusCode = req.getStatus();
-        if (statusCode == 403) {
+        if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException("Invalid api key");
-        } else if (statusCode == 204) {
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
             throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
-        } else if (statusCode == 200) {
+        } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
             scanInfo = gsonProcessor.fromJson(serviceResponse, ScanInfo[].class);
@@ -244,13 +244,13 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         }
         req.request(URI_VT2_URL_SCAN_REPORT);
         int statusCode = req.getStatus();
-        if (statusCode == 403) {
+        if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException("Invalid api key");
-        } else if (statusCode == 204) {
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
             throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
-        } else if (statusCode == 200) {
+        } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
             fileScanReport = gsonProcessor.fromJson(serviceResponse, FileScanReport[].class);
@@ -269,13 +269,13 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         String uriWithParams = URI_VT2_IP_REPORT + "?apikey=" + _apiKey + "&ip=" + ipAddress;
         req.request(uriWithParams);
         int statusCode = req.getStatus();
-        if (statusCode == 403) {
+        if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException("Invalid api key");
-        } else if (statusCode == 204) {
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
             throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
-        } else if (statusCode == 200) {
+        } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
             ipReport = gsonProcessor.fromJson(serviceResponse, IPAddressReport.class);
@@ -295,13 +295,13 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         req.request(uriWithParams);
 
         int statusCode = req.getStatus();
-        if (statusCode == 403) {
+        if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException("Invalid api key");
-        } else if (statusCode == 204) {
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
             throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
-        } else if (statusCode == 200) {
+        } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
             domainReport = gsonProcessor.fromJson(serviceResponse, DomainReport.class);
@@ -328,13 +328,13 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         req.addPart(commentPart);
         req.request(URI_VT2_PUT_COMMENT);
         int statusCode = req.getStatus();
-        if (statusCode == 403) {
+        if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException("Invalid api key");
-        } else if (statusCode == 204) {
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
             throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
-        } else if (statusCode == 200) {
+        } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
             generalResponse = gsonProcessor.fromJson(serviceResponse, GeneralResponse.class);
