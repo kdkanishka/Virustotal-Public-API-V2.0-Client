@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.kanishka.virustotal.config;
+package com.kanishka.virustotalv2;
 
 /**
  * Configuration singleton which allows to maintain configurations
- * @author kdesilva
+ * @author kdkanishka@gmail.com
  */
 public class VirusTotalConfig {
 
@@ -19,13 +19,12 @@ public class VirusTotalConfig {
 
     public static VirusTotalConfig getConfigInstance() {
         if (configInstance == null) {
-            synchronized (configInstance) {
+            synchronized (VirusTotalConfig.class) {
                 if (configInstance == null) {
                     configInstance = new VirusTotalConfig();
                 }
             }
         }
-
         return configInstance;
     }
 
