@@ -396,7 +396,11 @@ How to use API
         }
     }
 ```
+### Support or Contact
+Having trouble with this api ? contact kdkanishka@gmail.com and I'll help you to sort it out.
 
+### Contribute to this Project
+You are welcome to suggest new features and improvements. please feel free to fork and make pull requests with your additions and improvements. 
 
 [JDK 1.5 or higher version]:http://www.oracle.com/technetwork/java/javase/downloads/index.html
 [Apache Maven 3.x]:http://maven.apache.org
