@@ -44,6 +44,10 @@ public class FileScanReport {
         this.scan_id = scan_id;
     }
 
+    /**
+     *
+     * @return SHA1 hash value for the resource
+     */
     public String getSha1() {
         return sha1;
     }
@@ -52,6 +56,11 @@ public class FileScanReport {
         this.sha1 = sha1;
     }
 
+    /**
+     * Returns uniquely identifiable ID for the resource
+     *
+     * @return uniquely identifiable ID for the resource
+     */
     public String getResource() {
         return resource;
     }
@@ -60,6 +69,12 @@ public class FileScanReport {
         this.resource = resource;
     }
 
+    /**
+     * Retuns response code for the requested resource
+     *
+     * @return 1 if results are available for the requested resource otherwise
+     * it will return 0
+     */
     public Integer getResponse_code() {
         return response_code;
     }
@@ -68,6 +83,10 @@ public class FileScanReport {
         this.response_code = response_code;
     }
 
+    /**
+     *
+     * @return scanned date time
+     */
     public String getScan_date() {
         return scan_date;
     }
@@ -76,6 +95,10 @@ public class FileScanReport {
         this.scan_date = scan_date;
     }
 
+    /**
+     *
+     * @return permalink for the resource
+     */
     public String getPermalink() {
         return permalink;
     }
@@ -84,6 +107,10 @@ public class FileScanReport {
         this.permalink = permalink;
     }
 
+    /**
+     *
+     * @return verbose message for the resource
+     */
     public String getVerbose_msg() {
         return verbose_msg;
     }
@@ -92,6 +119,10 @@ public class FileScanReport {
         this.verbose_msg = verbose_msg;
     }
 
+    /**
+     *
+     * @return total number of scanners
+     */
     public Integer getTotal() {
         return total;
     }
@@ -100,6 +131,10 @@ public class FileScanReport {
         this.total = total;
     }
 
+    /**
+     *
+     * @return number of positives
+     */
     public Integer getPositives() {
         return positives;
     }
@@ -108,6 +143,10 @@ public class FileScanReport {
         this.positives = positives;
     }
 
+    /**
+     *
+     * @return SHA256 hash for the resource
+     */
     public String getSha256() {
         return sha256;
     }
@@ -116,6 +155,10 @@ public class FileScanReport {
         this.sha256 = sha256;
     }
 
+    /**
+     *
+     * @return MD5 Hash for the resource
+     */
     public String getMd5() {
         return md5;
     }

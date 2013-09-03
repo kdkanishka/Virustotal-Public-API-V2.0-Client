@@ -22,7 +22,11 @@ public class ScanInfo {
 
     public ScanInfo() {
     }
-
+    
+    /**
+     * 
+     * @return unique id to identify the scan
+     */
     public String getScan_id() {
         return scan_id;
     }
@@ -31,6 +35,10 @@ public class ScanInfo {
         this.scan_id = scan_id;
     }
 
+    /**
+     * 
+     * @return SHA1 hash for the scanned file
+     */
     public String getSha1() {
         return sha1;
     }
@@ -39,6 +47,10 @@ public class ScanInfo {
         this.sha1 = sha1;
     }
 
+    /**
+     * 
+     * @return unique ID for the scanned resource
+     */
     public String getResource() {
         return resource;
     }
@@ -47,6 +59,10 @@ public class ScanInfo {
         this.resource = resource;
     }
 
+    /**
+     * 
+     * @return response code for the request
+     */
     public int getResponse_code() {
         return response_code;
     }
