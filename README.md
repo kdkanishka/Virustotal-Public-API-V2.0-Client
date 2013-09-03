@@ -28,6 +28,7 @@ Getting started
       <version>1.0-SNAPSHOT</version>
 </dependency>
 ```
+* If your project is not maven based, add `target/VirustotalPublicV2.0-1.0-SNAPSHOT.jar` file to your class path.
 
 
 
