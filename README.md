@@ -20,13 +20,14 @@ Getting started
 3. Build and install the project using maven
  - `mvn clean install`
 4. Add following dependency to your maven project
-<pre>
-&lt;dependency&gt;
-   &lt;groupId&gt;com.kanishka.api&lt;/groupId&gt;
-   &lt;artifactId&gt;VirustotalPublicV2.0&lt;/artifactId&gt;
-   &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
-&lt;/dependency&gt;
-</pre>
+
+``` xml
+<dependency>
+      <groupId>com.kanishka.api</groupId>
+      <artifactId>VirustotalPublicV2.0</artifactId>
+      <version>1.0-SNAPSHOT</version>
+</dependency>
+```
 
 
 
