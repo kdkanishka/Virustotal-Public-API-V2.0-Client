@@ -39,9 +39,9 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
 
     public VirustotalPublicV2Impl() throws APIKeyNotFoundException {
         gsonProcessor = new Gson();
-        String apiKey = System.getProperty("APIKEY");
-        if (apiKey == null) {
-            throw new APIKeyNotFoundException("API Key is not set. Please set api key.\nSample : System.setProperty(\"APIKEY\", \"YOURAPIKEY\")");
+        String apiKey = VirusTotalConfig.getConfigInstance().getVirusTotalAPIKey();
+        if (apiKey == null || apiKey.length()==0) {
+            throw new APIKeyNotFoundException("API Key is not set. Please set api key.\nSample : VirusTotalConfig.getConfigInstance().setVirusTotalAPIKey(\"APIKEY\")");
         } else {
             this._apiKey = apiKey;
         }
