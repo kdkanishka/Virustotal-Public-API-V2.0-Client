@@ -5,7 +5,7 @@
 package com.kanishka.virustotal.dto;
 
 /**
- * Represent the information of a queued resource
+ *
  * @author kdkanishka@gmail.com
  */
 public class ScanInfo {
