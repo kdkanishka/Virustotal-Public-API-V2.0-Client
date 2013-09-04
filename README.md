@@ -15,7 +15,7 @@ Getting started
 ---------------
 1. Clone project from GIT repo
  - `git clone https://github.com/kdkanishka/Virustotal-Public-API-V2.0-Client.git`
-2. OR Download the project as a zip file and extract
+2. OR [Download] the project as a zip file and extract
  - `https://github.com/kdkanishka/Virustotal-Public-API-V2.0-Client/archive/master.zip`
 3. Build and install the project using maven
  - `mvn clean install -DskipTests`
@@ -404,3 +404,4 @@ You are welcome to suggest new features and improvements. please feel free to fo
 
 [JDK 1.5 or higher version]:http://www.oracle.com/technetwork/java/javase/downloads/index.html
 [Apache Maven 3.x]:http://maven.apache.org
+[Download]:https://github.com/kdkanishka/Virustotal-Public-API-V2.0-Client/archive/master.zip
