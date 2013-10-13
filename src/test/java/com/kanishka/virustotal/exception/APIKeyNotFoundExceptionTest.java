@@ -28,7 +28,7 @@ public class APIKeyNotFoundExceptionTest {
     @Test(expected = APIKeyNotFoundException.class)
     public void testExceptionForEmptyKey() throws APIKeyNotFoundException {
         //without setting api key
-        VirusTotalConfig.getConfigInstance().setVirusTotalAPIKey("");
+        VirusTotalConfig.getConfigInstance().setVirusTotalAPIKey("3d2a1046a17bb8d325403ae512e12f9467f159869817c834dac6aa7662235fb8");
         VirustotalPublicV2 virusTotalv2API=new VirustotalPublicV2Impl();
     }
 }

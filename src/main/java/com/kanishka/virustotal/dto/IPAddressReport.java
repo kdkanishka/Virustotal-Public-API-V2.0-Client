@@ -9,6 +9,7 @@ package com.kanishka.virustotal.dto;
  * @author kdkanishka@gmail.com
  */
 public class IPAddressReport {
+
     private Sample[] undetected_downloaded_samples;
     private Sample[] detected_downloaded_samples;
     private Resolution[] resolutions;
@@ -23,7 +24,7 @@ public class IPAddressReport {
     }
 
     public void setUndetected_downloaded_samples(Sample[] undetected_downloaded_samples) {
-        this.undetected_downloaded_samples = undetected_downloaded_samples;
+        System.arraycopy(undetected_downloaded_samples, 0, this.undetected_downloaded_samples, 0, undetected_downloaded_samples.length);
     }
 
     public Sample[] getDetected_downloaded_samples() {
@@ -31,7 +32,7 @@ public class IPAddressReport {
     }
 
     public void setDetected_downloaded_samples(Sample[] detected_downloaded_samples) {
-        this.detected_downloaded_samples = detected_downloaded_samples;
+        System.arraycopy(detected_downloaded_samples, 0, this.detected_downloaded_samples, 0, detected_downloaded_samples.length);
     }
 
     public Resolution[] getResolutions() {
@@ -39,7 +40,7 @@ public class IPAddressReport {
     }
 
     public void setResolutions(Resolution[] resolutions) {
-        this.resolutions = resolutions;
+        System.arraycopy(resolutions, 0, this.resolutions, 0, resolutions.length);
     }
 
     public Sample[] getDetected_communicating_samples() {
@@ -47,7 +48,7 @@ public class IPAddressReport {
     }
 
     public void setDetected_communicating_samples(Sample[] detected_communicating_samples) {
-        this.detected_communicating_samples = detected_communicating_samples;
+        System.arraycopy(detected_communicating_samples, 0, this.detected_communicating_samples, 0, detected_communicating_samples.length);
     }
 
     public Sample[] getUndetected_communicating_samples() {
@@ -55,7 +56,7 @@ public class IPAddressReport {
     }
 
     public void setUndetected_communicating_samples(Sample[] undetected_communicating_samples) {
-        this.undetected_communicating_samples = undetected_communicating_samples;
+        System.arraycopy(detected_communicating_samples, 0, this.undetected_communicating_samples, 0, undetected_communicating_samples.length);
     }
 
     public URL[] getDetected_urls() {
@@ -63,7 +64,7 @@ public class IPAddressReport {
     }
 
     public void setDetected_urls(URL[] detected_urls) {
-        this.detected_urls = detected_urls;
+        System.arraycopy(detected_urls, 0, this.detected_urls, 0, detected_urls.length);
     }
 
     public int getResponse_code() {
@@ -81,5 +82,4 @@ public class IPAddressReport {
     public void setVerbose_msg(String verbose_msg) {
         this.verbose_msg = verbose_msg;
     }
-    
 }

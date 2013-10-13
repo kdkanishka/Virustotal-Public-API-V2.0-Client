@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-Build Without Tests</actionName>
+            <displayName>Build Without Tests</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+                <goal>-DskipTests</goal>
+            </goals>
+        </action>
+    </actions>
