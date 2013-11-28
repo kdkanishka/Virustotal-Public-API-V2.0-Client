@@ -40,14 +40,14 @@ public class VirusTotalConfigTest {
     /**
      * Test of getVirusTotalAPIKey method, of class VirusTotalConfig.
      */
-    @Test
-    public void testGetVirusTotalAPIKey() {
-        System.out.println("getVirusTotalAPIKey");
-        String expResult = "";
-        VirusTotalConfig instance=VirusTotalConfig.getConfigInstance();
-        String key = instance.getVirusTotalAPIKey();
-        assertEquals(expResult, key);
-    }
+//    @Test
+//    public void testGetVirusTotalAPIKey() {
+//        System.out.println("getVirusTotalAPIKey");
+//        String expResult = "";
+//        VirusTotalConfig instance=VirusTotalConfig.getConfigInstance();
+//        String key = instance.getVirusTotalAPIKey();
+//        assertEquals(expResult, key);
+//    }
 
     /**
      * Test of setVirusTotalAPIKey method, of class VirusTotalConfig.

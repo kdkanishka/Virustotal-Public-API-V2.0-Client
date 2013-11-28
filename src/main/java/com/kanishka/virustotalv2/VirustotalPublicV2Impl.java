@@ -34,16 +34,20 @@ import org.apache.http.entity.mime.content.StringBody;
  */
 public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
 
-    Gson gsonProcessor;
-    private String _apiKey;
+    private Gson gsonProcessor;
+    private String apiKey;
+    private static final String API_KEY_FIELD = "apikey";
+    private static final String RESOURCE_FIELD = "resource";
+    private static final String ERR_MSG_EXCEED_MAX_REQ_PM="Exceeded maximum number of requests per minute, Please try again later.";
+    private static final String ERR_MSG_INVALID_API_KEY="Invalid api key";
 
     public VirustotalPublicV2Impl() throws APIKeyNotFoundException {
         gsonProcessor = new Gson();
-        String apiKey = VirusTotalConfig.getConfigInstance().getVirusTotalAPIKey();
-        if (apiKey == null || apiKey.length()==0) {
+        apiKey = VirusTotalConfig.getConfigInstance().getVirusTotalAPIKey();
+        if (apiKey == null || apiKey.length() == 0) {
             throw new APIKeyNotFoundException("API Key is not set. Please set api key.\nSample : VirusTotalConfig.getConfigInstance().setVirusTotalAPIKey(\"APIKEY\")");
         } else {
-            this._apiKey = apiKey;
+            this.apiKey = apiKey;
         }
     }
 
@@ -54,17 +58,17 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         req.setMethod(RequestMethod.POST);
         FileBody fileBody = new FileBody(fileToScan);
         MultiPartEntity file = new MultiPartEntity("file", fileBody);
-        MultiPartEntity apikey = new MultiPartEntity("apikey", new StringBody(_apiKey));
+        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
         req.addPart(file);
         req.addPart(apikey);
         req.request(URI_VT2_FILE_SCAN);
         int statusCode = req.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
-            throw new UnauthorizedAccessException("Invalid api key");
+            throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
-            throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
@@ -81,7 +85,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         }
         HTTPRequest req = new BasicHTTPRequestImpl();
         req.setMethod(RequestMethod.POST);
-        MultiPartEntity apikey = new MultiPartEntity("apikey", new StringBody(_apiKey));
+        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
         req.addPart(apikey);
         StringBuilder resourceStr = new StringBuilder();
         for (String resource : resources) {
@@ -93,16 +97,16 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             resourceStr.deleteCharAt(lastCommaIdx);
         }
 
-        MultiPartEntity part = new MultiPartEntity("resource", new StringBody(resourceStr.toString()));
+        MultiPartEntity part = new MultiPartEntity(RESOURCE_FIELD, new StringBody(resourceStr.toString()));
         req.addPart(part);
         req.request(URI_VT2_RESCAN);
         int statusCode = req.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
-            throw new UnauthorizedAccessException("Invalid api key");
+            throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
-            throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
@@ -116,18 +120,18 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         FileScanReport fileScanReport = new FileScanReport();
         HTTPRequest req = new BasicHTTPRequestImpl();
         req.setMethod(RequestMethod.POST);
-        MultiPartEntity apikey = new MultiPartEntity("apikey", new StringBody(_apiKey));
-        MultiPartEntity resourcePart = new MultiPartEntity("resource", new StringBody(resource));
+        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
+        MultiPartEntity resourcePart = new MultiPartEntity(RESOURCE_FIELD, new StringBody(resource));
         req.addPart(apikey);
         req.addPart(resourcePart);
         req.request(URI_VT2_FILE_SCAN_REPORT);
         int statusCode = req.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
-            throw new UnauthorizedAccessException("Invalid api key");
+            throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
-            throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
@@ -144,7 +148,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         }
         HTTPRequest req = new BasicHTTPRequestImpl();
         req.setMethod(RequestMethod.POST);
-        MultiPartEntity apikey = new MultiPartEntity("apikey", new StringBody(_apiKey));
+        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
         req.addPart(apikey);
         StringBuilder resourceStr = new StringBuilder();
         for (String resource : resources) {
@@ -156,16 +160,16 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             resourceStr.deleteCharAt(lastCommaIdx);
         }
 
-        MultiPartEntity part = new MultiPartEntity("resource", new StringBody(resourceStr.toString()));
+        MultiPartEntity part = new MultiPartEntity(RESOURCE_FIELD, new StringBody(resourceStr.toString()));
         req.addPart(part);
         req.request(URI_VT2_FILE_SCAN_REPORT);
         int statusCode = req.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
-            throw new UnauthorizedAccessException("Invalid api key");
+            throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
-            throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
@@ -184,7 +188,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         }
         HTTPRequest req = new BasicHTTPRequestImpl();
         req.setMethod(RequestMethod.POST);
-        MultiPartEntity apikey = new MultiPartEntity("apikey", new StringBody(_apiKey));
+        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
         req.addPart(apikey);
         StringBuilder resourceStr = new StringBuilder();
         for (String url : urls) {
@@ -202,10 +206,10 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         int statusCode = req.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
-            throw new UnauthorizedAccessException("Invalid api key");
+            throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
-            throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
@@ -224,7 +228,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         }
         HTTPRequest req = new BasicHTTPRequestImpl();
         req.setMethod(RequestMethod.POST);
-        MultiPartEntity apikey = new MultiPartEntity("apikey", new StringBody(_apiKey));
+        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
         req.addPart(apikey);
         StringBuilder resourceStr = new StringBuilder();
         for (String resource : urls) {
@@ -236,7 +240,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             resourceStr.deleteCharAt(lastCommaIdx);
         }
 
-        MultiPartEntity part = new MultiPartEntity("resource", new StringBody(resourceStr.toString()));
+        MultiPartEntity part = new MultiPartEntity(RESOURCE_FIELD, new StringBody(resourceStr.toString()));
         req.addPart(part);
         if (scan) {
             MultiPartEntity scanPart = new MultiPartEntity("scan", new StringBody("1"));
@@ -246,10 +250,10 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         int statusCode = req.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
-            throw new UnauthorizedAccessException("Invalid api key");
+            throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
-            throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
@@ -266,15 +270,15 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         }
         HTTPRequest req = new BasicHTTPRequestImpl();
         req.setMethod(RequestMethod.GET);
-        String uriWithParams = URI_VT2_IP_REPORT + "?apikey=" + _apiKey + "&ip=" + ipAddress;
+        String uriWithParams = URI_VT2_IP_REPORT + "?apikey=" + apiKey + "&ip=" + ipAddress;
         req.request(uriWithParams);
         int statusCode = req.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
-            throw new UnauthorizedAccessException("Invalid api key");
+            throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
-            throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
@@ -291,16 +295,16 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         }
         HTTPRequest req = new BasicHTTPRequestImpl();
         req.setMethod(RequestMethod.GET);
-        String uriWithParams = URI_VT2_DOMAIN_REPORT + "?apikey=" + _apiKey + "&domain=" + domain;
+        String uriWithParams = URI_VT2_DOMAIN_REPORT + "?apikey=" + apiKey + "&domain=" + domain;
         req.request(uriWithParams);
 
         int statusCode = req.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
-            throw new UnauthorizedAccessException("Invalid api key");
+            throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
-            throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();
@@ -320,8 +324,8 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         HTTPRequest req = new BasicHTTPRequestImpl();
         req.setMethod(RequestMethod.POST);
 
-        MultiPartEntity apikey = new MultiPartEntity("apikey", new StringBody(_apiKey));
-        MultiPartEntity resourcePart = new MultiPartEntity("resource", new StringBody(resource));
+        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
+        MultiPartEntity resourcePart = new MultiPartEntity(RESOURCE_FIELD, new StringBody(resource));
         MultiPartEntity commentPart = new MultiPartEntity("comment", new StringBody(comment));
         req.addPart(apikey);
         req.addPart(resourcePart);
@@ -330,10 +334,10 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         int statusCode = req.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
-            throw new UnauthorizedAccessException("Invalid api key");
+            throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
-            throw new QuotaExceededException("Exceeded maximum number of requests per minute, Please try again later.");
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = req.getResponse();

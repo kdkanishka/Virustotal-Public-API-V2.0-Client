@@ -8,7 +8,7 @@ package com.kanishka.virustotalv2;
  * Configuration singleton which allows to maintain configurations
  * @author kdkanishka@gmail.com
  */
-public class VirusTotalConfig {
+public final class VirusTotalConfig {
 
     private String virusTotalAPIKey;
     private static VirusTotalConfig configInstance = null;
