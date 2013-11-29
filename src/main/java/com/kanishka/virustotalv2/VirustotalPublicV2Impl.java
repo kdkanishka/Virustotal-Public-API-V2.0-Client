@@ -24,6 +24,7 @@ import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_FILE_SCAN_REP
 import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_RESCAN;
 import static com.kanishka.virustotalv2.VirustotalPublicV2.VT2_MAX_ALLOWED_URLS_PER_REQUEST;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
@@ -38,8 +39,8 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     private String apiKey;
     private static final String API_KEY_FIELD = "apikey";
     private static final String RESOURCE_FIELD = "resource";
-    private static final String ERR_MSG_EXCEED_MAX_REQ_PM="Exceeded maximum number of requests per minute, Please try again later.";
-    private static final String ERR_MSG_INVALID_API_KEY="Invalid api key";
+    private static final String ERR_MSG_EXCEED_MAX_REQ_PM = "Exceeded maximum number of requests per minute, Please try again later.";
+    private static final String ERR_MSG_INVALID_API_KEY = "Invalid api key";
 
     public VirustotalPublicV2Impl() throws APIKeyNotFoundException {
         gsonProcessor = new Gson();
@@ -52,7 +53,10 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public ScanInfo scanFile(File fileToScan) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception {
+    public ScanInfo scanFile(File fileToScan) throws UnsupportedEncodingException, UnauthorizedAccessException, FileNotFoundException, Exception {
+        if(!fileToScan.canRead()){
+            throw new FileNotFoundException("Could not access file, either the file may not exists or not accessible!");
+        }
         ScanInfo scanInfo = new ScanInfo();
         HTTPRequest req = new BasicHTTPRequestImpl();
         req.setMethod(RequestMethod.POST);

@@ -12,6 +12,7 @@ import com.kanishka.virustotal.dto.ScanInfo;
 import com.kanishka.virustotal.exception.InvalidArguentsException;
 import com.kanishka.virustotal.exception.UnauthorizedAccessException;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -36,7 +37,7 @@ public interface VirustotalPublicV2 {
      * @param fileToScan : the file object to be scanned
      * @return
      */
-    ScanInfo scanFile(final File fileToScan) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception;
+    ScanInfo scanFile(final File fileToScan) throws UnsupportedEncodingException, UnauthorizedAccessException, FileNotFoundException, Exception;
 
     /**
      *
