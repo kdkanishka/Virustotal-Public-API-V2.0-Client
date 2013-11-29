@@ -9,6 +9,7 @@ import com.kanishka.net.model.FormData;
 import com.kanishka.net.model.Header;
 import com.kanishka.net.model.MultiPartEntity;
 import com.kanishka.net.model.RequestMethod;
+import com.kanishka.net.model.Response;
 import java.util.List;
 
 /**
@@ -17,19 +18,6 @@ import java.util.List;
  */
 public interface HTTPRequest {
 
-    void addRequestHeaders(Header reqHeader);
-
-    void setMethod(RequestMethod method);
-
-    void addFormData(FormData formData);
-
-    void addPart(MultiPartEntity part);
-
-    void request(String urlStr) throws Exception;
-
-    String getResponse() throws RequestNotComplete;
-
-    List<Header> getResponseHeaders() throws RequestNotComplete;
-
-    int getStatus() throws RequestNotComplete;
+    public Response request(String urlStr, List<Header> reqHeaders, List<FormData> formData,
+            RequestMethod requestMethod, List<MultiPartEntity> multiParts) throws Exception;
 }
