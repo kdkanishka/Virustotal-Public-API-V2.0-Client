@@ -48,8 +48,19 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     private static final String RESOURCE_FIELD = "resource";
     private static final String ERR_MSG_EXCEED_MAX_REQ_PM = "Exceeded maximum number of requests per minute, Please try again later.";
     private static final String ERR_MSG_INVALID_API_KEY = "Invalid api key";
+    private HTTPRequest httpRequestObject;
 
     public VirustotalPublicV2Impl() throws APIKeyNotFoundException {
+        initialize();
+        httpRequestObject = new BasicHTTPRequestImpl();
+    }
+
+    public VirustotalPublicV2Impl(HTTPRequest httpRequestObject) throws APIKeyNotFoundException {
+        initialize();
+        this.httpRequestObject = httpRequestObject;
+    }
+
+    private void initialize() throws APIKeyNotFoundException {
         gsonProcessor = new Gson();
         apiKey = VirusTotalConfig.getConfigInstance().getVirusTotalAPIKey();
         if (apiKey == null || apiKey.length() == 0) {
@@ -66,7 +77,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         }
         Response responseWrapper = new Response();
         ScanInfo scanInfo = new ScanInfo();
-        HTTPRequest req = new BasicHTTPRequestImpl();
 
         FileBody fileBody = new FileBody(fileToScan);
         MultiPartEntity file = new MultiPartEntity("file", fileBody);
@@ -76,7 +86,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         multiParts.add(apikey);
         int statusCode = -1;
         try {
-            responseWrapper = req.request(URI_VT2_FILE_SCAN, null, null, RequestMethod.GET, multiParts);
+            responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN, null, null, RequestMethod.GET, multiParts);
 
             statusCode = responseWrapper.getStatus();
         } catch (IOException e) {
@@ -105,7 +115,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             throw new InvalidArguentsException("Incorrect parameter \'resources\', resource should be an array with at least one element");
         }
         Response responseWrapper = new Response();
-        HTTPRequest req = new BasicHTTPRequestImpl();
+
         MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
         StringBuilder resourceStr = new StringBuilder();
         for (String resource : resources) {
@@ -122,7 +132,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         multiParts.add(part);
         multiParts.add(apikey);
 
-        responseWrapper = req.request(URI_VT2_RESCAN, null, null, RequestMethod.POST, multiParts);
+        responseWrapper = httpRequestObject.request(URI_VT2_RESCAN, null, null, RequestMethod.POST, multiParts);
 
         int statusCode = responseWrapper.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
@@ -143,13 +153,13 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     public FileScanReport getScanReport(String resource) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception {
         Response responseWrapper = new Response();
         FileScanReport fileScanReport = new FileScanReport();
-        HTTPRequest req = new BasicHTTPRequestImpl();
+
         MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
         MultiPartEntity resourcePart = new MultiPartEntity(RESOURCE_FIELD, new StringBody(resource));
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(apikey);
         multiParts.add(resourcePart);
-        responseWrapper = req.request(URI_VT2_FILE_SCAN_REPORT, null, null, RequestMethod.POST, multiParts);
+        responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN_REPORT, null, null, RequestMethod.POST, multiParts);
 
 
         int statusCode = responseWrapper.getStatus();
@@ -174,7 +184,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         if (resources == null) {
             throw new InvalidArguentsException("Incorrect parameter \'resources\', resource should be an array with at least one element");
         }
-        HTTPRequest req = new BasicHTTPRequestImpl();
+
         MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
         StringBuilder resourceStr = new StringBuilder();
         for (String resource : resources) {
@@ -190,7 +200,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(apikey);
         multiParts.add(part);
-        responseWrapper = req.request(URI_VT2_FILE_SCAN_REPORT, null, null, RequestMethod.POST, multiParts);
+        responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN_REPORT, null, null, RequestMethod.POST, multiParts);
 
         int statusCode = responseWrapper.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
@@ -216,7 +226,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         } else if (urls.length > VT2_MAX_ALLOWED_URLS_PER_REQUEST) {
             throw new InvalidArguentsException("Incorrect parameter \'urls\' , maximum number(" + VT2_MAX_ALLOWED_URLS_PER_REQUEST + ") of urls per request has been exceeded.");
         }
-        HTTPRequest req = new BasicHTTPRequestImpl();
         MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
         StringBuilder resourceStr = new StringBuilder();
         for (String url : urls) {
@@ -232,7 +241,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(apikey);
         multiParts.add(part);
-        responseWrapper = req.request(URI_VT2_URL_SCAN, null, null, RequestMethod.POST, multiParts);
+        responseWrapper = httpRequestObject.request(URI_VT2_URL_SCAN, null, null, RequestMethod.POST, multiParts);
 
         int statusCode = responseWrapper.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
@@ -258,7 +267,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         } else if (urls.length > VT2_MAX_ALLOWED_URLS_PER_REQUEST) {
             throw new InvalidArguentsException("Incorrect parameter \'urls\' , maximum number(" + VT2_MAX_ALLOWED_URLS_PER_REQUEST + ") of urls per request has been exceeded.");
         }
-        HTTPRequest req = new BasicHTTPRequestImpl();
+
         MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
         StringBuilder resourceStr = new StringBuilder();
         for (String resource : urls) {
@@ -280,7 +289,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             multiParts.add(scanPart);
         }
 
-        responseWrapper = req.request(URI_VT2_URL_SCAN_REPORT, null, null, RequestMethod.POST, multiParts);
+        responseWrapper = httpRequestObject.request(URI_VT2_URL_SCAN_REPORT, null, null, RequestMethod.POST, multiParts);
         int statusCode = responseWrapper.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
@@ -303,9 +312,9 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         if (ipAddress == null) {
             throw new InvalidArguentsException("Incorrect parameter \'ipAddress\', it should be a valid IP address ");
         }
-        HTTPRequest req = new BasicHTTPRequestImpl();
+
         String uriWithParams = URI_VT2_IP_REPORT + "?apikey=" + apiKey + "&ip=" + ipAddress;
-        responseWrapper = req.request(uriWithParams, null, null, RequestMethod.GET, null);
+        responseWrapper = httpRequestObject.request(uriWithParams, null, null, RequestMethod.GET, null);
 
         int statusCode = responseWrapper.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
@@ -329,9 +338,9 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         if (domain == null) {
             throw new InvalidArguentsException("Incorrect parameter \'domain\', it should be a valid domain name");
         }
-        HTTPRequest req = new BasicHTTPRequestImpl();
+
         String uriWithParams = URI_VT2_DOMAIN_REPORT + "?apikey=" + apiKey + "&domain=" + domain;
-        responseWrapper = req.request(uriWithParams, null, null, RequestMethod.GET, null);
+        responseWrapper = httpRequestObject.request(uriWithParams, null, null, RequestMethod.GET, null);
 
         int statusCode = responseWrapper.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
@@ -358,7 +367,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         GeneralResponse generalResponse = new GeneralResponse();
         generalResponse.setResponse_code(-1);
         generalResponse.setVerbose_msg("Could not publish the comment, API error occured!");
-        HTTPRequest req = new BasicHTTPRequestImpl();
 
         MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
         MultiPartEntity resourcePart = new MultiPartEntity(RESOURCE_FIELD, new StringBody(resource));
@@ -367,7 +375,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         multiParts.add(apikey);
         multiParts.add(resourcePart);
         multiParts.add(commentPart);
-        responseWrapper = req.request(URI_VT2_PUT_COMMENT, null, null, RequestMethod.POST, null);
+        responseWrapper = httpRequestObject.request(URI_VT2_PUT_COMMENT, null, null, RequestMethod.POST, null);
 
         int statusCode = responseWrapper.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
