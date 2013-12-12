@@ -6,6 +6,10 @@ package com.kanishka.virustotalv2;
 
 import com.kanishka.net.commons.BasicHTTPRequestImpl;
 import com.kanishka.net.commons.HTTPRequest;
+import com.kanishka.net.model.FormData;
+import com.kanishka.net.model.Header;
+import com.kanishka.net.model.HttpStatus;
+import com.kanishka.net.model.MultiPartEntity;
 import com.kanishka.net.model.RequestMethod;
 import com.kanishka.virustotal.dto.ScanInfo;
 import com.kanishka.virustotal.exception.APIKeyNotFoundException;
@@ -14,6 +18,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
+
 import org.junit.After;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -23,7 +29,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 /**
  *
@@ -76,12 +84,18 @@ public class VirustotalPublicV2ImplTest {
 
     @Test(expected = UnauthorizedAccessException.class)
     public void testScanWithInvalidApiKey() throws APIKeyNotFoundException, UnsupportedEncodingException, UnauthorizedAccessException, FileNotFoundException, Exception {
-        //when(httpRequestObject.request())
+        when(httpRequestObject.request(anyString(), anyList(), anyList(), any(RequestMethod.class), anyList(), any(HttpStatus.class))).then(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+                ((HttpStatus)invocationOnMock.getArguments()[5]).setStatusCode(VirustotalStatus.FORBIDDEN);
+                throw new IOException();
+            }
+        }) ;
+
         File eicarTestFile = new File("src/main/resources/testfiles/eicar.com.txt");
         VirusTotalConfig instance = VirusTotalConfig.getConfigInstance();
         instance.setVirusTotalAPIKey("invalid_api_key");
-        //VirustotalPublicV2 virusTotalRef = new VirustotalPublicV2Impl(httpRequestObject);
-        VirustotalPublicV2 virusTotalRef = new VirustotalPublicV2Impl();
+        VirustotalPublicV2 virusTotalRef = new VirustotalPublicV2Impl(httpRequestObject);
         ScanInfo scanInformation = virusTotalRef.scanFile(eicarTestFile);
     }
 }
