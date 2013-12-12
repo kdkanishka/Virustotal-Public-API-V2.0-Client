@@ -7,6 +7,7 @@ package com.kanishka.net.commons;
 import com.kanishka.net.exception.RequestNotComplete;
 import com.kanishka.net.model.FormData;
 import com.kanishka.net.model.Header;
+import com.kanishka.net.model.HttpStatus;
 import com.kanishka.net.model.MultiPartEntity;
 import com.kanishka.net.model.RequestMethod;
 import com.kanishka.net.model.Response;
@@ -39,7 +40,10 @@ public class BasicHTTPRequestImpl implements HTTPRequest {
 
     @Override
     public Response request(String urlStr,List<Header> reqHeaders,List<FormData> formData,
-    RequestMethod requestMethod,List<MultiPartEntity> multiParts) throws Exception {
+    RequestMethod requestMethod,List<MultiPartEntity> multiParts, HttpStatus httpStatus) throws Exception {
+        if(httpStatus==null){
+            httpStatus=new HttpStatus();
+        }
         List<Header> respoHeaders=new ArrayList<Header>();
         int status=-1;
         StringBuilder response=new StringBuilder();
@@ -119,10 +123,14 @@ public class BasicHTTPRequestImpl implements HTTPRequest {
                 response.append('\r');
             }
             status = conn.getResponseCode();
+            httpStatus.setStatusCode(conn.getResponseCode());
+            httpStatus.setMessage(conn.getResponseMessage());
             rd.close();
             conn.disconnect();
         } catch (Exception e) {
             status = conn.getResponseCode();
+            httpStatus.setStatusCode(conn.getResponseCode());
+            httpStatus.setMessage(conn.getResponseMessage());
             throw e;
         }
         responseWrapper=new Response(status, response.toString(), respoHeaders);

@@ -7,6 +7,7 @@ package com.kanishka.virustotalv2;
 import com.google.gson.Gson;
 import com.kanishka.net.commons.BasicHTTPRequestImpl;
 import com.kanishka.net.commons.HTTPRequest;
+import com.kanishka.net.model.HttpStatus;
 import com.kanishka.net.model.MultiPartEntity;
 import com.kanishka.net.model.RequestMethod;
 import com.kanishka.net.model.Response;
@@ -84,13 +85,13 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(file);
         multiParts.add(apikey);
-        int statusCode = -1;
+        Integer statusCode = -1;
+        HttpStatus httpStatus=new HttpStatus();
         try {
-            responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN, null, null, RequestMethod.GET, multiParts);
-
-            statusCode = responseWrapper.getStatus();
+            responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN, null, null, RequestMethod.GET, multiParts,httpStatus);
+            statusCode = httpStatus.getStatusCode();
         } catch (IOException e) {
-            statusCode = responseWrapper.getStatus();
+            statusCode = httpStatus.getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
@@ -131,10 +132,11 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(part);
         multiParts.add(apikey);
+        HttpStatus httpStatus=new HttpStatus();
 
-        responseWrapper = httpRequestObject.request(URI_VT2_RESCAN, null, null, RequestMethod.POST, multiParts);
+        responseWrapper = httpRequestObject.request(URI_VT2_RESCAN, null, null, RequestMethod.POST, multiParts, httpStatus);
+        int statusCode = httpStatus.getStatusCode();
 
-        int statusCode = responseWrapper.getStatus();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
@@ -159,7 +161,8 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(apikey);
         multiParts.add(resourcePart);
-        responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN_REPORT, null, null, RequestMethod.POST, multiParts);
+        HttpStatus httpStatus=new HttpStatus();
+        responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN_REPORT, null, null, RequestMethod.POST, multiParts, httpStatus);
 
 
         int statusCode = responseWrapper.getStatus();
@@ -200,9 +203,11 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(apikey);
         multiParts.add(part);
-        responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN_REPORT, null, null, RequestMethod.POST, multiParts);
+        HttpStatus httpStatus=new HttpStatus();
 
-        int statusCode = responseWrapper.getStatus();
+        responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN_REPORT, null, null, RequestMethod.POST, multiParts, httpStatus);
+
+        int statusCode = httpStatus.getStatusCode();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
@@ -241,9 +246,11 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(apikey);
         multiParts.add(part);
-        responseWrapper = httpRequestObject.request(URI_VT2_URL_SCAN, null, null, RequestMethod.POST, multiParts);
+        HttpStatus httpStatus=new HttpStatus();
 
-        int statusCode = responseWrapper.getStatus();
+        responseWrapper = httpRequestObject.request(URI_VT2_URL_SCAN, null, null, RequestMethod.POST, multiParts, httpStatus);
+
+        int statusCode = httpStatus.getStatusCode();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
@@ -288,9 +295,10 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             MultiPartEntity scanPart = new MultiPartEntity("scan", new StringBody("1"));
             multiParts.add(scanPart);
         }
+        HttpStatus httpStatus=new HttpStatus();
 
-        responseWrapper = httpRequestObject.request(URI_VT2_URL_SCAN_REPORT, null, null, RequestMethod.POST, multiParts);
-        int statusCode = responseWrapper.getStatus();
+        responseWrapper = httpRequestObject.request(URI_VT2_URL_SCAN_REPORT, null, null, RequestMethod.POST, multiParts, httpStatus);
+        int statusCode = httpStatus.getStatusCode();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
@@ -314,9 +322,11 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         }
 
         String uriWithParams = URI_VT2_IP_REPORT + "?apikey=" + apiKey + "&ip=" + ipAddress;
-        responseWrapper = httpRequestObject.request(uriWithParams, null, null, RequestMethod.GET, null);
+        HttpStatus httpStatus=new HttpStatus();
 
-        int statusCode = responseWrapper.getStatus();
+        responseWrapper = httpRequestObject.request(uriWithParams, null, null, RequestMethod.GET, null,httpStatus);
+
+        int statusCode = httpStatus.getStatusCode();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
@@ -340,9 +350,11 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         }
 
         String uriWithParams = URI_VT2_DOMAIN_REPORT + "?apikey=" + apiKey + "&domain=" + domain;
-        responseWrapper = httpRequestObject.request(uriWithParams, null, null, RequestMethod.GET, null);
+        HttpStatus httpStatus=new HttpStatus();
 
-        int statusCode = responseWrapper.getStatus();
+        responseWrapper = httpRequestObject.request(uriWithParams, null, null, RequestMethod.GET, null, httpStatus);
+
+        int statusCode = httpStatus.getStatusCode();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
@@ -375,9 +387,11 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         multiParts.add(apikey);
         multiParts.add(resourcePart);
         multiParts.add(commentPart);
-        responseWrapper = httpRequestObject.request(URI_VT2_PUT_COMMENT, null, null, RequestMethod.POST, null);
+        HttpStatus httpStatus=new HttpStatus();
 
-        int statusCode = responseWrapper.getStatus();
+        responseWrapper = httpRequestObject.request(URI_VT2_PUT_COMMENT, null, null, RequestMethod.POST, null, httpStatus);
+
+        int statusCode = httpStatus.getStatusCode();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
             //fobidden
             throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);

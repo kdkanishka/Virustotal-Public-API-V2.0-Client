@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.kanishka.net.exception.RequestNotComplete;
 import com.kanishka.net.model.FormData;
 import com.kanishka.net.model.Header;
+import com.kanishka.net.model.HttpStatus;
 import com.kanishka.net.model.RequestMethod;
 import com.kanishka.net.model.Response;
 import httpbin.HttpBinResponse;
@@ -47,8 +48,10 @@ public class BasicHTTPRequestImplTest {
         String arg1 = "val1";
         String arg2 = "val2";
         String uri = "http://httpbin.org/get?arg1=" + arg1 + "&arg2=" + arg2;
-        Response responseWrapper = request.request(uri, null, null, RequestMethod.GET, null);
-        assertTrue(responseWrapper.getStatus() == 200);
+        HttpStatus httpStatus=new HttpStatus();
+
+        Response responseWrapper = request.request(uri, null, null, RequestMethod.GET, null,httpStatus);
+        assertTrue(httpStatus.getStatusCode() == 200);
         assertTrue(responseWrapper.getResponse().length() > 0);
         HttpBinResponse httpBinRespObj = gsonParser.fromJson(responseWrapper.getResponse(), HttpBinResponse.class);
         assertEquals(httpBinRespObj.getArgs().get("arg1"), arg1);
@@ -68,9 +71,11 @@ public class BasicHTTPRequestImplTest {
         List<Header> requestHeaders = new ArrayList<Header>();
         requestHeaders.add(new Header("Header1", header1));
         requestHeaders.add(new Header("Header2", header2));
-        Response responseWrapper = request.request(uri, requestHeaders, null, RequestMethod.GET, null);
+        HttpStatus httpStatus=new HttpStatus();
+
+        Response responseWrapper = request.request(uri, requestHeaders, null, RequestMethod.GET, null, httpStatus);
         String response = responseWrapper.getResponse();
-        assertTrue(responseWrapper.getStatus() == 200);
+        assertTrue(httpStatus.getStatusCode() == 200);
         assertTrue(response.length() > 0);
         HttpBinResponse httpBinRespObj = gsonParser.fromJson(response, HttpBinResponse.class);
         assertEquals(httpBinRespObj.getArgs().get("arg1"), arg1);
@@ -90,9 +95,11 @@ public class BasicHTTPRequestImplTest {
         List<FormData> formData = new ArrayList<FormData>();
         formData.add(new FormData("formdata1", formdata1));
         formData.add(new FormData("formdata2", formdata2));
-        Response responseWrapper = request.request(uri, null, formData, RequestMethod.POST, null);
+        HttpStatus httpStatus=new HttpStatus();
+
+        Response responseWrapper = request.request(uri, null, formData, RequestMethod.POST, null,httpStatus);
         String response = responseWrapper.getResponse();
-        assertTrue(responseWrapper.getStatus() == 200);
+        assertTrue(httpStatus.getStatusCode() == 200);
         assertTrue(response.length() > 0);
         HttpBinResponse httpBinRespObj = gsonParser.fromJson(response, HttpBinResponse.class);
         assertEquals(httpBinRespObj.getForm().get("formdata1"), formdata1);
@@ -116,9 +123,11 @@ public class BasicHTTPRequestImplTest {
         List<FormData> formData = new ArrayList<FormData>();
         formData.add(new FormData("formdata1", formdata1));
         formData.add(new FormData("formdata2", formdata2));
-        Response responseWrapper = request.request(uri, requestHeaders, formData, RequestMethod.POST, null);
+        HttpStatus httpStatus=new HttpStatus();
+
+        Response responseWrapper = request.request(uri, requestHeaders, formData, RequestMethod.POST, null, httpStatus);
         String response = responseWrapper.getResponse();
-        assertTrue(responseWrapper.getStatus() == 200);
+        assertTrue(httpStatus.getStatusCode() == 200);
         assertTrue(response.length() > 0);
         HttpBinResponse httpBinRespObj = gsonParser.fromJson(response, HttpBinResponse.class);
         assertEquals(httpBinRespObj.getHeaders().get("Header1"), header1);

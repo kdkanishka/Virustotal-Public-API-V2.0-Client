@@ -76,10 +76,12 @@ public class VirustotalPublicV2ImplTest {
 
     @Test(expected = UnauthorizedAccessException.class)
     public void testScanWithInvalidApiKey() throws APIKeyNotFoundException, UnsupportedEncodingException, UnauthorizedAccessException, FileNotFoundException, Exception {
+        //when(httpRequestObject.request())
         File eicarTestFile = new File("src/main/resources/testfiles/eicar.com.txt");
         VirusTotalConfig instance = VirusTotalConfig.getConfigInstance();
         instance.setVirusTotalAPIKey("invalid_api_key");
-        VirustotalPublicV2 virusTotalRef = new VirustotalPublicV2Impl(httpRequestObject);
+        //VirustotalPublicV2 virusTotalRef = new VirustotalPublicV2Impl(httpRequestObject);
+        VirustotalPublicV2 virusTotalRef = new VirustotalPublicV2Impl();
         ScanInfo scanInformation = virusTotalRef.scanFile(eicarTestFile);
     }
 }
