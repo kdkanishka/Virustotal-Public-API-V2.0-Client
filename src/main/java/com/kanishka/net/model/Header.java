@@ -4,12 +4,14 @@
  */
 package com.kanishka.net.model;
 
+import java.io.Serializable;
+
 /**
  * Represents HTTP header
  *
  * @author kdkanishka@gmail.com
  */
-public class Header {
+public class Header implements Serializable {
 
     private String key;
     private String value;

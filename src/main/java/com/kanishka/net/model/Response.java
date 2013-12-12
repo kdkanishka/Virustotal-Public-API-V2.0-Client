@@ -4,13 +4,14 @@
  */
 package com.kanishka.net.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author kanishka
  */
-public class Response {
+public class Response implements Serializable {
 
     private int status;
     private String response;

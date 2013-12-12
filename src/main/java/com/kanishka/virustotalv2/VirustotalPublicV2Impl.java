@@ -20,22 +20,15 @@ import com.kanishka.virustotal.exception.APIKeyNotFoundException;
 import com.kanishka.virustotal.exception.InvalidArguentsException;
 import com.kanishka.virustotal.exception.QuotaExceededException;
 import com.kanishka.virustotal.exception.UnauthorizedAccessException;
-import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_DOMAIN_REPORT;
-import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_FILE_SCAN;
-import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_FILE_SCAN_REPORT;
-import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_PUT_COMMENT;
-import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_RESCAN;
-import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_URL_SCAN;
-import static com.kanishka.virustotalv2.VirustotalPublicV2.URI_VT2_URL_SCAN_REPORT;
-import static com.kanishka.virustotalv2.VirustotalPublicV2.VT2_MAX_ALLOWED_URLS_PER_REQUEST;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
 
 /**
  *
