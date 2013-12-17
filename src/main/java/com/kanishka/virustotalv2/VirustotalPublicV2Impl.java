@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author kdkanishka@gmail.com
  */
 public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
@@ -74,14 +73,15 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
 
         FileBody fileBody = new FileBody(fileToScan);
         MultiPartEntity file = new MultiPartEntity("file", fileBody);
-        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));;
+        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
+        ;
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(file);
         multiParts.add(apikey);
         Integer statusCode = -1;
-        HttpStatus httpStatus=new HttpStatus();
+        HttpStatus httpStatus = new HttpStatus();
         try {
-            responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN, null, null, RequestMethod.GET, multiParts,httpStatus);
+            responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN, null, null, RequestMethod.GET, multiParts, httpStatus);
             statusCode = httpStatus.getStatusCode();
         } catch (IOException e) {
             statusCode = httpStatus.getStatusCode();
@@ -125,22 +125,29 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(part);
         multiParts.add(apikey);
-        HttpStatus httpStatus=new HttpStatus();
+        HttpStatus httpStatus = new HttpStatus();
+        Integer statusCode = -1;
 
-        responseWrapper = httpRequestObject.request(URI_VT2_RESCAN, null, null, RequestMethod.POST, multiParts, httpStatus);
-        int statusCode = httpStatus.getStatusCode();
+        try {
+            responseWrapper = httpRequestObject.request(URI_VT2_RESCAN, null, null, RequestMethod.POST, multiParts, httpStatus);
+            statusCode = httpStatus.getStatusCode();
+        } catch (IOException e) {
+            statusCode = httpStatus.getStatusCode();
+            if (statusCode == VirustotalStatus.FORBIDDEN) {
+                //fobidden
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
+            } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
+                //limit exceeded
+                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
+            }
+        }
 
-        if (statusCode == VirustotalStatus.FORBIDDEN) {
-            //fobidden
-            throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
-        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
-            //limit exceeded
-            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
-        } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
+        if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
             scanInfo = gsonProcessor.fromJson(serviceResponse, ScanInfo[].class);
         }
+
         return scanInfo;
     }
 
@@ -154,18 +161,24 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(apikey);
         multiParts.add(resourcePart);
-        HttpStatus httpStatus=new HttpStatus();
-        responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN_REPORT, null, null, RequestMethod.POST, multiParts, httpStatus);
+        HttpStatus httpStatus = new HttpStatus();
+        Integer statusCode = -1;
 
+        try {
+            responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN_REPORT, null, null, RequestMethod.POST, multiParts, httpStatus);
+            statusCode = httpStatus.getStatusCode();
+        } catch (IOException e) {
+            statusCode = httpStatus.getStatusCode();
+            if (statusCode == VirustotalStatus.FORBIDDEN) {
+                //fobidden
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
+            } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
+                //limit exceeded
+                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
+            }
+        }
 
-        int statusCode = responseWrapper.getStatus();
-        if (statusCode == VirustotalStatus.FORBIDDEN) {
-            //fobidden
-            throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
-        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
-            //limit exceeded
-            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
-        } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
+        if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
             fileScanReport = gsonProcessor.fromJson(serviceResponse, FileScanReport.class);
@@ -196,18 +209,24 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(apikey);
         multiParts.add(part);
-        HttpStatus httpStatus=new HttpStatus();
+        HttpStatus httpStatus = new HttpStatus();
+        Integer statusCode = -1;
 
-        responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN_REPORT, null, null, RequestMethod.POST, multiParts, httpStatus);
+        try {
+            responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN_REPORT, null, null, RequestMethod.POST, multiParts, httpStatus);
+            statusCode = httpStatus.getStatusCode();
+        } catch (IOException e) {
+            statusCode = httpStatus.getStatusCode();
+            if (statusCode == VirustotalStatus.FORBIDDEN) {
+                //fobidden
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
+            } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
+                //limit exceeded
+                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
+            }
+        }
 
-        int statusCode = httpStatus.getStatusCode();
-        if (statusCode == VirustotalStatus.FORBIDDEN) {
-            //fobidden
-            throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
-        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
-            //limit exceeded
-            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
-        } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
+        if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
             fileScanReport = gsonProcessor.fromJson(serviceResponse, FileScanReport[].class);
@@ -239,7 +258,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(apikey);
         multiParts.add(part);
-        HttpStatus httpStatus=new HttpStatus();
+        HttpStatus httpStatus = new HttpStatus();
 
         responseWrapper = httpRequestObject.request(URI_VT2_URL_SCAN, null, null, RequestMethod.POST, multiParts, httpStatus);
 
@@ -288,7 +307,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             MultiPartEntity scanPart = new MultiPartEntity("scan", new StringBody("1"));
             multiParts.add(scanPart);
         }
-        HttpStatus httpStatus=new HttpStatus();
+        HttpStatus httpStatus = new HttpStatus();
 
         responseWrapper = httpRequestObject.request(URI_VT2_URL_SCAN_REPORT, null, null, RequestMethod.POST, multiParts, httpStatus);
         int statusCode = httpStatus.getStatusCode();
@@ -315,9 +334,9 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         }
 
         String uriWithParams = URI_VT2_IP_REPORT + "?apikey=" + apiKey + "&ip=" + ipAddress;
-        HttpStatus httpStatus=new HttpStatus();
+        HttpStatus httpStatus = new HttpStatus();
 
-        responseWrapper = httpRequestObject.request(uriWithParams, null, null, RequestMethod.GET, null,httpStatus);
+        responseWrapper = httpRequestObject.request(uriWithParams, null, null, RequestMethod.GET, null, httpStatus);
 
         int statusCode = httpStatus.getStatusCode();
         if (statusCode == VirustotalStatus.FORBIDDEN) {
@@ -343,7 +362,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         }
 
         String uriWithParams = URI_VT2_DOMAIN_REPORT + "?apikey=" + apiKey + "&domain=" + domain;
-        HttpStatus httpStatus=new HttpStatus();
+        HttpStatus httpStatus = new HttpStatus();
 
         responseWrapper = httpRequestObject.request(uriWithParams, null, null, RequestMethod.GET, null, httpStatus);
 
@@ -380,7 +399,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         multiParts.add(apikey);
         multiParts.add(resourcePart);
         multiParts.add(commentPart);
-        HttpStatus httpStatus=new HttpStatus();
+        HttpStatus httpStatus = new HttpStatus();
 
         responseWrapper = httpRequestObject.request(URI_VT2_PUT_COMMENT, null, null, RequestMethod.POST, null, httpStatus);
 

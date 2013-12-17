@@ -4,6 +4,8 @@
  */
 package com.kanishka.virustotal.dto;
 
+import java.io.Serializable;
+
 /**
  *
  * @author kdkanishka@gmail.com
