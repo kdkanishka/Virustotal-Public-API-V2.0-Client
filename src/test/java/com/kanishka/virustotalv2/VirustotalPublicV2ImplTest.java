@@ -302,4 +302,5 @@ public class VirustotalPublicV2ImplTest {
         FileScanReport[] fileScanReports = virusTotalRef.getScanReports(resources);
 
     }
+
 }

@@ -145,7 +145,12 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
-            scanInfo = gsonProcessor.fromJson(serviceResponse, ScanInfo[].class);
+            if (resources.length > 1) {
+                scanInfo = gsonProcessor.fromJson(serviceResponse, ScanInfo[].class);
+            } else {
+                ScanInfo scanInfo1Elem = gsonProcessor.fromJson(serviceResponse, ScanInfo.class);
+                scanInfo = new ScanInfo[]{scanInfo1Elem};
+            }
         }
 
         return scanInfo;
@@ -229,7 +234,12 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
-            fileScanReport = gsonProcessor.fromJson(serviceResponse, FileScanReport[].class);
+            if (resources.length > 1) {
+                fileScanReport = gsonProcessor.fromJson(serviceResponse, FileScanReport[].class);
+            } else {
+                FileScanReport fScanRep = gsonProcessor.fromJson(serviceResponse, FileScanReport.class);
+                fileScanReport = new FileScanReport[]{fScanRep};
+            }
         }
         return fileScanReport;
     }
@@ -272,7 +282,12 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
-            scanInfo = gsonProcessor.fromJson(serviceResponse, ScanInfo[].class);
+            if (urls.length > 1) {
+                scanInfo = gsonProcessor.fromJson(serviceResponse, ScanInfo[].class);
+            } else {
+                ScanInfo scanInforElem = gsonProcessor.fromJson(serviceResponse, ScanInfo.class);
+                scanInfo = new ScanInfo[]{scanInforElem};
+            }
         }
         return scanInfo;
     }
@@ -320,7 +335,12 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         } else if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
-            fileScanReport = gsonProcessor.fromJson(serviceResponse, FileScanReport[].class);
+            if (urls.length > 1) {
+                fileScanReport = gsonProcessor.fromJson(serviceResponse, FileScanReport[].class);
+            } else {
+                FileScanReport fileScanReportElem = gsonProcessor.fromJson(serviceResponse, FileScanReport.class);
+                fileScanReport = new FileScanReport[]{fileScanReportElem};
+            }
         }
         return fileScanReport;
     }
