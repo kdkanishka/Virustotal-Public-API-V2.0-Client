@@ -81,11 +81,11 @@ public class VirustotalPublicV2ImplTest {
         assertNotNull(scanInformation.getMd5());
         assertNotNull(scanInformation.getPermalink());
         assertNotNull(scanInformation.getResource());
-        assertNotNull(scanInformation.getResponse_code());
-        assertNotNull(scanInformation.getScan_id());
+        assertNotNull(scanInformation.getResponseCode());
+        assertNotNull(scanInformation.getScanId());
         assertNotNull(scanInformation.getSha1());
         assertNotNull(scanInformation.getSha256());
-        assertNotNull(scanInformation.getVerbose_msg());
+        assertNotNull(scanInformation.getVerboseMessage());
     }
 
     @Test(expected = FileNotFoundException.class)
@@ -163,7 +163,7 @@ public class VirustotalPublicV2ImplTest {
         for (int i = 0; i < scanInfoArr.length; i++) {
             assertEquals(resources[i], scanInfoArr[i].getResource());
             assertNotNull(scanInfoArr[i].getPermalink());
-            assertNotNull(scanInfoArr[i].getScan_id());
+            assertNotNull(scanInfoArr[i].getScanId());
         }
     }
 
@@ -205,7 +205,7 @@ public class VirustotalPublicV2ImplTest {
 
         assertNotNull(fileScanReport);
         assertTrue(fileScanReport.getScans().size() > 0);
-        assertNotNull(fileScanReport.getScan_id());
+        assertNotNull(fileScanReport.getScanId());
         assertNotNull(fileScanReport.getSha1());
         assertNotNull(fileScanReport.getResource());
         assertNotNull(fileScanReport.getPermalink());
@@ -237,7 +237,7 @@ public class VirustotalPublicV2ImplTest {
 
         assertNotNull(fileScanReport);
         assertTrue(fileScanReport.getScans().size() > 0);
-        assertNotNull(fileScanReport.getScan_id());
+        assertNotNull(fileScanReport.getScanId());
         assertNotNull(fileScanReport.getSha1());
         assertNotNull(fileScanReport.getResource());
         assertNotNull(fileScanReport.getPermalink());
@@ -273,7 +273,7 @@ public class VirustotalPublicV2ImplTest {
         for (int i = 0; i < fileScanReports.length; i++) {
             assertEquals(fileScanReports[i].getResource() , resources[i]);
             assertNotNull(fileScanReports[i].getResource());
-            assertNotNull(fileScanReports[i].getScan_id());
+            assertNotNull(fileScanReports[i].getScanId());
             assertNotNull(fileScanReports[i].getSha1());
             assertNotNull(fileScanReports[i].getPermalink());
             assertNotNull(fileScanReports[i].getTotal());

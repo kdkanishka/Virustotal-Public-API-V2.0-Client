@@ -4,39 +4,47 @@
  */
 package com.kanishka.virustotal.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
- *
  * @author kdkanishka@gmail.com
  */
 public class ScanInfo {
 
-    private String scan_id;
+    @SerializedName("scan_id")
+    private String scanId;
+    @SerializedName("sha1")
     private String sha1;
+    @SerializedName("resource")
     private String resource;
-    private int response_code;
+    @SerializedName("response_code")
+    private int responseCode;
+    @SerializedName("sha256")
     private String sha256;
+    @SerializedName("permalink")
     private String permalink;
+    @SerializedName("md5")
     private String md5;
-    private String verbose_msg;
-    private String scan_date;
+    @SerializedName("verbose_msg")
+    private String verboseMessage;
+    @SerializedName("scan_date")
+    private String scanDate;
 
     public ScanInfo() {
     }
-    
+
     /**
-     * 
      * @return unique id to identify the scan
      */
-    public String getScan_id() {
-        return scan_id;
+    public String getScanId() {
+        return scanId;
     }
 
-    public void setScan_id(String scan_id) {
-        this.scan_id = scan_id;
+    public void setScanId(String scanId) {
+        this.scanId = scanId;
     }
 
     /**
-     * 
      * @return SHA1 hash for the scanned file
      */
     public String getSha1() {
@@ -48,7 +56,6 @@ public class ScanInfo {
     }
 
     /**
-     * 
      * @return unique ID for the scanned resource
      */
     public String getResource() {
@@ -60,15 +67,14 @@ public class ScanInfo {
     }
 
     /**
-     * 
      * @return response code for the request
      */
-    public int getResponse_code() {
-        return response_code;
+    public int getResponseCode() {
+        return responseCode;
     }
 
-    public void setResponse_code(int response_code) {
-        this.response_code = response_code;
+    public void setResponseCode(int responseCode) {
+        this.responseCode = responseCode;
     }
 
     public String getSha256() {
@@ -95,19 +101,19 @@ public class ScanInfo {
         this.md5 = md5;
     }
 
-    public String getVerbose_msg() {
-        return verbose_msg;
+    public String getVerboseMessage() {
+        return verboseMessage;
     }
 
-    public void setVerbose_msg(String verbose_msg) {
-        this.verbose_msg = verbose_msg;
+    public void setVerboseMessage(String verboseMessage) {
+        this.verboseMessage = verboseMessage;
     }
 
-    public String getScan_date() {
-        return scan_date;
+    public String getScanDate() {
+        return scanDate;
     }
 
-    public void setScan_date(String scan_date) {
-        this.scan_date = scan_date;
+    public void setScanDate(String scanDate) {
+        this.scanDate = scanDate;
     }
 }

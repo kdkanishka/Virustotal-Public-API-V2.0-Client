@@ -4,35 +4,44 @@
  */
 package com.kanishka.virustotal.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
- *
  * @author kdkanishka@gmail.com
  */
 public class IPAddressReport {
 
-    private Sample[] undetected_downloaded_samples;
-    private Sample[] detected_downloaded_samples;
+    @SerializedName("undetected_downloaded_samples")
+    private Sample[] undetectedDownloadedSamples;
+    @SerializedName("detected_downloaded_samples")
+    private Sample[] detectedDownloadedSamples;
+    @SerializedName("resolutions")
     private Resolution[] resolutions;
-    private Sample[] detected_communicating_samples;
-    private Sample[] undetected_communicating_samples;
-    private URL[] detected_urls;
-    private int response_code;
-    private String verbose_msg;
+    @SerializedName("detected_communicating_samples")
+    private Sample[] detectedCommunicatingSamples;
+    @SerializedName("undetected_communicating_samples")
+    private Sample[] undetectedCommunicatingSamples;
+    @SerializedName("detected_urls")
+    private URL[] detectedUrls;
+    @SerializedName("response_code")
+    private int responseCode;
+    @SerializedName("verbose_msg")
+    private String verboseMessage;
 
-    public Sample[] getUndetected_downloaded_samples() {
-        return undetected_downloaded_samples;
+    public Sample[] getUndetectedDownloadedSamples() {
+        return undetectedDownloadedSamples;
     }
 
-    public void setUndetected_downloaded_samples(Sample[] undetected_downloaded_samples) {
-        System.arraycopy(undetected_downloaded_samples, 0, this.undetected_downloaded_samples, 0, undetected_downloaded_samples.length);
+    public void setUndetectedDownloadedSamples(Sample[] undetectedDownloadedSamples) {
+        System.arraycopy(undetectedDownloadedSamples, 0, this.undetectedDownloadedSamples, 0, undetectedDownloadedSamples.length);
     }
 
-    public Sample[] getDetected_downloaded_samples() {
-        return detected_downloaded_samples;
+    public Sample[] getDetectedDownloadedSamples() {
+        return detectedDownloadedSamples;
     }
 
-    public void setDetected_downloaded_samples(Sample[] detected_downloaded_samples) {
-        System.arraycopy(detected_downloaded_samples, 0, this.detected_downloaded_samples, 0, detected_downloaded_samples.length);
+    public void setDetectedDownloadedSamples(Sample[] detectedDownloadedSamples) {
+        System.arraycopy(detectedDownloadedSamples, 0, this.detectedDownloadedSamples, 0, detectedDownloadedSamples.length);
     }
 
     public Resolution[] getResolutions() {
@@ -43,43 +52,43 @@ public class IPAddressReport {
         System.arraycopy(resolutions, 0, this.resolutions, 0, resolutions.length);
     }
 
-    public Sample[] getDetected_communicating_samples() {
-        return detected_communicating_samples;
+    public Sample[] getDetectedCommunicatingSamples() {
+        return detectedCommunicatingSamples;
     }
 
-    public void setDetected_communicating_samples(Sample[] detected_communicating_samples) {
-        System.arraycopy(detected_communicating_samples, 0, this.detected_communicating_samples, 0, detected_communicating_samples.length);
+    public void setDetectedCommunicatingSamples(Sample[] detectedCommunicatingSamples) {
+        System.arraycopy(detectedCommunicatingSamples, 0, this.detectedCommunicatingSamples, 0, detectedCommunicatingSamples.length);
     }
 
-    public Sample[] getUndetected_communicating_samples() {
-        return undetected_communicating_samples;
+    public Sample[] getUndetectedCommunicatingSamples() {
+        return undetectedCommunicatingSamples;
     }
 
-    public void setUndetected_communicating_samples(Sample[] undetected_communicating_samples) {
-        System.arraycopy(detected_communicating_samples, 0, this.undetected_communicating_samples, 0, undetected_communicating_samples.length);
+    public void setUndetectedCommunicatingSamples(Sample[] undetectedCommunicatingSamples) {
+        System.arraycopy(detectedCommunicatingSamples, 0, this.undetectedCommunicatingSamples, 0, undetectedCommunicatingSamples.length);
     }
 
-    public URL[] getDetected_urls() {
-        return detected_urls;
+    public URL[] getDetectedUrls() {
+        return detectedUrls;
     }
 
-    public void setDetected_urls(URL[] detected_urls) {
-        System.arraycopy(detected_urls, 0, this.detected_urls, 0, detected_urls.length);
+    public void setDetectedUrls(URL[] detectedUrls) {
+        System.arraycopy(detectedUrls, 0, this.detectedUrls, 0, detectedUrls.length);
     }
 
-    public int getResponse_code() {
-        return response_code;
+    public int getResponseCode() {
+        return responseCode;
     }
 
-    public void setResponse_code(int response_code) {
-        this.response_code = response_code;
+    public void setResponseCode(int responseCode) {
+        this.responseCode = responseCode;
     }
 
-    public String getVerbose_msg() {
-        return verbose_msg;
+    public String getVerboseMessage() {
+        return verboseMessage;
     }
 
-    public void setVerbose_msg(String verbose_msg) {
-        this.verbose_msg = verbose_msg;
+    public void setVerboseMessage(String verboseMessage) {
+        this.verboseMessage = verboseMessage;
     }
 }

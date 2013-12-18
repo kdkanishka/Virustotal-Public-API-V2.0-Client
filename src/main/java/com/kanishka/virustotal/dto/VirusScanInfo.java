@@ -4,15 +4,20 @@
  */
 package com.kanishka.virustotal.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
- *
  * @author kdkanishka@gmail.com
  */
 public class VirusScanInfo {
 
+    @SerializedName("detected")
     private boolean detected;
+    @SerializedName("version")
     private String version;
+    @SerializedName("result")
     private String result;
+    @SerializedName("update")
     private String update;
 
     public VirusScanInfo() {

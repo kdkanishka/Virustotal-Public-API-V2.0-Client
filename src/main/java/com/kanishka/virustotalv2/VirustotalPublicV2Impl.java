@@ -431,8 +431,8 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         Response responseWrapper = new Response();
 
         GeneralResponse generalResponse = new GeneralResponse();
-        generalResponse.setResponse_code(-1);
-        generalResponse.setVerbose_msg("Could not publish the comment, API error occured!");
+        generalResponse.setResponseCode(-1);
+        generalResponse.setVerboseMessage("Could not publish the comment, API error occured!");
 
         MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
         MultiPartEntity resourcePart = new MultiPartEntity(RESOURCE_FIELD, new StringBody(resource));

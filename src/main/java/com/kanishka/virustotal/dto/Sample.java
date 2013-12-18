@@ -4,14 +4,21 @@
  */
 package com.kanishka.virustotal.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  *
  * @author kdkanishka@gmail.com
  */
 public class Sample {
+
+    @SerializedName("date")
     private String date;
+    @SerializedName("positives")
     private int positives;
+    @SerializedName("total")
     private int total;
+    @SerializedName("sha256")
     private String sha256;
 
     public String getDate() {

@@ -4,28 +4,32 @@
  */
 package com.kanishka.virustotal.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
- *
  * @author kdkanishka@gmail.com
  */
 public class Resolution {
-    private String last_resolved;
-    private String ip_address;
 
-    public String getLast_resolved() {
-        return last_resolved;
+    @SerializedName("last_resolved")
+    private String lastResolved;
+    @SerializedName("ip_address")
+    private String ipAddress;
+
+    public String getLastResolved() {
+        return lastResolved;
     }
 
-    public void setLast_resolved(String last_resolved) {
-        this.last_resolved = last_resolved;
+    public void setLastResolved(String lastResolved) {
+        this.lastResolved = lastResolved;
     }
 
-    public String getIp_address() {
-        return ip_address;
+    public String getIpAddress() {
+        return ipAddress;
     }
 
-    public void setIp_address(String ip_address) {
-        this.ip_address = ip_address;
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
 }

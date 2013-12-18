@@ -4,25 +4,38 @@
  */
 package com.kanishka.virustotal.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
 
 /**
- *
  * @author kdkanishka@gmail.com
  */
 public class FileScanReport {
 
+    @SerializedName("scans")
     private HashMap<String, VirusScanInfo> scans;
-    private String scan_id;
+    @SerializedName("scan_id")
+    private String scanId;
+    @SerializedName("sha1")
     private String sha1;
+    @SerializedName("resource")
     private String resource;
-    private Integer response_code;
-    private String scan_date;
+    @SerializedName("response_code")
+    private Integer responseCode;
+    @SerializedName("scan_date")
+    private String scanDate;
+    @SerializedName("permalink")
     private String permalink;
-    private String verbose_msg;
+    @SerializedName("verbose_msg")
+    private String verboseMessage;
+    @SerializedName("total")
     private Integer total;
+    @SerializedName("positives")
     private Integer positives;
+    @SerializedName("sha256")
     private String sha256;
+    @SerializedName("md5")
     private String md5;
 
     public FileScanReport() {
@@ -36,16 +49,15 @@ public class FileScanReport {
         this.scans = scans;
     }
 
-    public String getScan_id() {
-        return scan_id;
+    public String getScanId() {
+        return scanId;
     }
 
-    public void setScan_id(String scan_id) {
-        this.scan_id = scan_id;
+    public void setScanId(String scanId) {
+        this.scanId = scanId;
     }
 
     /**
-     *
      * @return SHA1 hash value for the resource
      */
     public String getSha1() {
@@ -75,28 +87,26 @@ public class FileScanReport {
      * @return 1 if results are available for the requested resource otherwise
      * it will return 0
      */
-    public Integer getResponse_code() {
-        return response_code;
+    public Integer getResponseCode() {
+        return responseCode;
     }
 
-    public void setResponse_code(Integer response_code) {
-        this.response_code = response_code;
+    public void setResponseCode(Integer responseCode) {
+        this.responseCode = responseCode;
     }
 
     /**
-     *
      * @return scanned date time
      */
-    public String getScan_date() {
-        return scan_date;
+    public String getScanDate() {
+        return scanDate;
     }
 
-    public void setScan_date(String scan_date) {
-        this.scan_date = scan_date;
+    public void setScanDate(String scanDate) {
+        this.scanDate = scanDate;
     }
 
     /**
-     *
      * @return permalink for the resource
      */
     public String getPermalink() {
@@ -108,19 +118,17 @@ public class FileScanReport {
     }
 
     /**
-     *
      * @return verbose message for the resource
      */
-    public String getVerbose_msg() {
-        return verbose_msg;
+    public String getVerboseMessage() {
+        return verboseMessage;
     }
 
-    public void setVerbose_msg(String verbose_msg) {
-        this.verbose_msg = verbose_msg;
+    public void setVerboseMessage(String verboseMessage) {
+        this.verboseMessage = verboseMessage;
     }
 
     /**
-     *
      * @return total number of scanners
      */
     public Integer getTotal() {
@@ -132,7 +140,6 @@ public class FileScanReport {
     }
 
     /**
-     *
      * @return number of positives
      */
     public Integer getPositives() {
@@ -144,7 +151,6 @@ public class FileScanReport {
     }
 
     /**
-     *
      * @return SHA256 hash for the resource
      */
     public String getSha256() {
@@ -156,7 +162,6 @@ public class FileScanReport {
     }
 
     /**
-     *
      * @return MD5 Hash for the resource
      */
     public String getMd5() {

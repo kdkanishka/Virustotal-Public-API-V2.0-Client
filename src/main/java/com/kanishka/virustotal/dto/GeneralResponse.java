@@ -4,27 +4,31 @@
  */
 package com.kanishka.virustotal.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
- *
  * @author kdkanishka@gmail.com
  */
 public class GeneralResponse {
-    private int response_code;
-    private String verbose_msg;
 
-    public int getResponse_code() {
-        return response_code;
+    @SerializedName("response_code")
+    private int responseCode;
+    @SerializedName("verbose_msg")
+    private String verboseMessage;
+
+    public int getResponseCode() {
+        return responseCode;
     }
 
-    public void setResponse_code(int response_code) {
-        this.response_code = response_code;
+    public void setResponseCode(int responseCode) {
+        this.responseCode = responseCode;
     }
 
-    public String getVerbose_msg() {
-        return verbose_msg;
+    public String getVerboseMessage() {
+        return verboseMessage;
     }
 
-    public void setVerbose_msg(String verbose_msg) {
-        this.verbose_msg = verbose_msg;
+    public void setVerboseMessage(String verboseMessage) {
+        this.verboseMessage = verboseMessage;
     }
 }

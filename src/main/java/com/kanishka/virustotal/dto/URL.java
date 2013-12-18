@@ -4,15 +4,22 @@
  */
 package com.kanishka.virustotal.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  *
  * @author kdkanishka@gmail.com
  */
 public class URL {
+
+    @SerializedName("url")
     private String url;
+    @SerializedName("positives")
     private int positives;
+    @SerializedName("total")
     private int total;
-    private String scan_date;
+    @SerializedName("scan_date")
+    private String scanDate;
 
     public String getUrl() {
         return url;
@@ -38,12 +45,12 @@ public class URL {
         this.total = total;
     }
 
-    public String getScan_date() {
-        return scan_date;
+    public String getScanDate() {
+        return scanDate;
     }
 
-    public void setScan_date(String scan_date) {
-        this.scan_date = scan_date;
+    public void setScanDate(String scanDate) {
+        this.scanDate = scanDate;
     }
 
 }
