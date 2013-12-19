@@ -11,12 +11,12 @@ import com.kanishka.virustotal.dto.IPAddressReport;
 import com.kanishka.virustotal.dto.ScanInfo;
 import com.kanishka.virustotal.exception.InvalidArguentsException;
 import com.kanishka.virustotal.exception.UnauthorizedAccessException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
 /**
- *
  * @author kdkanishka@gmail.com
  */
 public interface VirustotalPublicV2 {
@@ -33,75 +33,85 @@ public interface VirustotalPublicV2 {
     final int VT2_MAX_ALLOWED_URLS_PER_REQUEST = 4;
 
     /**
+     * Scan a given single file
      *
-     * @param fileToScan : the file object to be scanned
-     * @return
+     * @param fileToScan the file object to be scanned
+     * @return scan information
      */
     ScanInfo scanFile(final File fileToScan) throws UnsupportedEncodingException, UnauthorizedAccessException, FileNotFoundException, Exception;
 
     /**
+     * The call allows you to rescan files in VirusTotal's file store without having to resubmit them, thus saving bandwidth.
+     * <p/>
+     * The VirusTotal public API allows you to rescan files that you or other users already sent in the past and, hence,
+     * are already present in our file store. Before requesting a rescan we encourage you to retrieve the latest report
+     * on the files, if it is recent enough you might want to save time and bandwidth by making use of it.
      *
-     * @param resources : a set of md5/sha1/sha256 hashes. You can also specify
-     * a CSV list made up of a combination of any of the three allowed hashes
-     * (up to 25 items), this allows you to perform a batch request with one
-     * single call. Note that the file must already be present in our file
-     * store.
+     * @param resources a set of md5/sha1/sha256 hashes.this allows you to perform a batch request with one
+     *                  single call. Note that the file must already be present in our file
+     *                  store.
      * @return
      */
     ScanInfo[] reScanFiles(final String[] resources) throws UnsupportedEncodingException, UnauthorizedAccessException, InvalidArguentsException, Exception;
 
     /**
+     * Returns the detailed most reason scan report for a given resource
      *
-     * @param resource : a md5/sha1/sha256 hash will retrieve the most recent
-     * report on a given sample. You may also specify a scan_id
-     * (sha256-timestamp as returned by the file upload API) to access a
-     * specific report. You can also specify a CSV list made up of a combination
-     * of hashes and scan_ids (up to 4 items with the standard request rate),
-     * this allows you to perform a batch request with one single call.
+     * @param resource a md5/sha1/sha256 hash will retrieve the most recent
+     *                 report on a given sample. You may also specify a scan_id
+     *                 (sha256-timestamp as returned by the file upload API) to access a
+     *                 specific report.
      * @return
      */
     FileScanReport getScanReport(final String resource) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception;
 
     /**
+     * Returns the detailed most reason scan reports for given set of resources
      *
-     * @param resources
+     * @param resources You can also specify an array of resources (up to 4 items with the standard request rate),
+     *                  this allows you to perform a batch request with one single call.
      * @return
      */
     FileScanReport[] getScanReports(final String[] resources) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception;
 
     /**
+     * URLs can also be submitted for scanning. Once again, before performing your submission we encourage you to retrieve
+     * the latest report on the URL, if it is recent enough you might want to save time and bandwidth by making use of it.
      *
-     * @param urls : set of urls to be scanned
+     * @param urls set of urls to be scanned
      * @return
      */
     ScanInfo[] scanUrls(final String[] urls) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception;
 
     /**
+     * Returns the detailed scan report for given set of urls
      *
-     * @param url : set of urls
-     * @param scan : true if url s must be scanned before generating the report
+     * @param url  set of urls
+     * @param scan true if url s must be scanned before generating the report
      * @return
      */
     FileScanReport[] getUrlScanReport(final String[] url, boolean scan) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception;
 
     /**
+     * Returns detailed report for a given IP
      *
-     * @param ipAddress
+     * @param ipAddress a valid IPv4 address in dotted quad notation, for the time being only IPv4 addresses are supported.
      * @return
      */
     IPAddressReport getIPAddresReport(final String ipAddress) throws InvalidArguentsException, Exception;
 
     /**
+     * Returns a detailed report for a given domain
      *
-     * @param domain : domain name
+     * @param domain domain name
      * @return
      */
     DomainReport getDomainReport(final String domain) throws InvalidArguentsException, UnauthorizedAccessException, Exception;
 
     /**
-     *
-     * @param resource
-     * @param comment
+     * @param resource either a md5/sha1/sha256 hash of the file you want to review or the URL itself that you want to comment on.
+     * @param comment  the actual review, you can tag it using the "#" twitter-like syntax (e.g. #disinfection #zbot)
+     *                 and reference users using the "@" syntax (e.g. @VirusTotalTeam).
      * @return
      */
     GeneralResponse makeAComment(final String resource, final String comment) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception;
