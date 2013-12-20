@@ -84,10 +84,10 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             statusCode = httpStatus.getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
             } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
                 //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
+                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
@@ -132,10 +132,10 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             statusCode = httpStatus.getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
             } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
                 //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
+                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 
@@ -173,10 +173,10 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             statusCode = httpStatus.getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
             } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
                 //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
+                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 
@@ -221,10 +221,10 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             statusCode = httpStatus.getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
             } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
                 //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
+                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 
@@ -275,10 +275,10 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             statusCode = httpStatus.getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
             } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
                 //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
+                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 
@@ -335,10 +335,10 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             statusCode = httpStatus.getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
             } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
                 //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
+                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 
@@ -374,10 +374,10 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             statusCode = httpStatus.getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
             } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
                 //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
+                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 
@@ -408,10 +408,10 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             statusCode = httpStatus.getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
             } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
                 //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
+                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 
@@ -451,10 +451,10 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             statusCode = httpStatus.getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
             } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
                 //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
+                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 

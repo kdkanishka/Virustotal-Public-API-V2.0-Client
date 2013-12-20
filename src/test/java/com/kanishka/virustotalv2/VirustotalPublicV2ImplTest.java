@@ -62,6 +62,7 @@ public class VirustotalPublicV2ImplTest {
      */
     @Test
     public void testScanFile() throws APIKeyNotFoundException, UnsupportedEncodingException, UnauthorizedAccessException, Exception {
+        System.out.println("Test scanning a single file");
         final Response responseWrapper = (Response) PersistanceUtil.deSeralizeObject(new File("src/main/resources/persistedObjects/responseWrapperInScanFile.dat"));
 
         when(httpRequestObject.request(anyString(), anyList(), anyList(), any(RequestMethod.class), anyList(), any(HttpStatus.class))).then(new Answer<Object>() {
@@ -90,6 +91,7 @@ public class VirustotalPublicV2ImplTest {
 
     @Test(expected = FileNotFoundException.class)
     public void testScanNotFoundFile() throws APIKeyNotFoundException, UnsupportedEncodingException, UnauthorizedAccessException, FileNotFoundException, Exception {
+        System.out.println("Test scanning a single file when file does not exists");
         File eicarTestFile = new File("thisFileIsnotAvailable.txt");
         VirusTotalConfig instance = VirusTotalConfig.getConfigInstance();
         instance.setVirusTotalAPIKey("3d2a1046a17bb8d325403ae512e12f9467f159869817c834dac6aa7662235fb8");
@@ -99,6 +101,7 @@ public class VirustotalPublicV2ImplTest {
 
     @Test(expected = UnauthorizedAccessException.class)
     public void testScanFileWithInvalidApiKey() throws APIKeyNotFoundException, UnsupportedEncodingException, UnauthorizedAccessException, FileNotFoundException, Exception {
+        System.out.println("Test scanning a single file when api key is invalid");
         when(httpRequestObject.request(anyString(), anyList(), anyList(), any(RequestMethod.class), anyList(), any(HttpStatus.class))).then(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
@@ -116,6 +119,7 @@ public class VirustotalPublicV2ImplTest {
 
     @Test(expected = QuotaExceededException.class)
     public void testScanFileWhenQuotaExceed() throws Exception {
+        System.out.println("Test scanning a single file when quota exceeded");
         when(httpRequestObject.request(anyString(), anyList(), anyList(), any(RequestMethod.class), anyList(), any(HttpStatus.class))).then(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
@@ -133,6 +137,7 @@ public class VirustotalPublicV2ImplTest {
 
     @Test(expected = InvalidArguentsException.class)
     public void testReScanFilesWhenInputResourcesIsNull() throws Exception {
+        System.out.println("Test scanning files when provided resource array is null");
         String[] resources = null;
         VirusTotalConfig instance = VirusTotalConfig.getConfigInstance();
         instance.setVirusTotalAPIKey("3d2a1046a17bb8d325403ae512e12f9467f159869817c834dac6aa7662235fb8");
@@ -142,6 +147,7 @@ public class VirustotalPublicV2ImplTest {
 
     @Test
     public void testReScanFilesForTwoValidResources() throws Exception {
+        System.out.println("Test re-scanning files for two valid resources");
         String[] resources = {"5a01e158c7f7143086187982770aff1e799d95077a380353b4b1d6dfb6efc152", "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f"};
 
         final Response responseWrapper = (Response) PersistanceUtil.deSeralizeObject(new File("src/main/resources/persistedObjects/responseWrapperRescan2ValidFiles.dat"));
@@ -169,6 +175,8 @@ public class VirustotalPublicV2ImplTest {
 
     @Test(expected = QuotaExceededException.class)
     public void testReScanFilesWhenQuotaExceeded() throws Exception {
+        System.out.println("Test scanning files when quota exceeded");
+
         String[] resources = {"5a01e158c7f7143086187982770aff1e799d95077a380353b4b1d6dfb6efc152", "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f"};
 
         when(httpRequestObject.request(anyString(), anyList(), anyList(), any(RequestMethod.class), anyList(), any(HttpStatus.class))).then(new Answer<Object>() {
@@ -187,6 +195,8 @@ public class VirustotalPublicV2ImplTest {
 
     @Test
     public void testScanReportForValidResource() throws Exception {
+        System.out.println("Test scan report for valid resources");
+
         String resource = "5a01e158c7f7143086187982770aff1e799d95077a380353b4b1d6dfb6efc152";
         final Response responseWrapper = (Response) PersistanceUtil.deSeralizeObject(new File("src/main/resources/persistedObjects/responseWrapperScanReportForValidResource.dat"));
 
@@ -219,6 +229,8 @@ public class VirustotalPublicV2ImplTest {
 
     @Test(expected = QuotaExceededException.class)
     public void testScanReportForValidResourceWhenQuotaExceeded() throws Exception {
+        System.out.println("Test scan report when quota exceeded");
+
         String resource = "5a01e158c7f7143086187982770aff1e799d95077a380353b4b1d6dfb6efc152";
         final Response responseWrapper = (Response) PersistanceUtil.deSeralizeObject(new File("src/main/resources/persistedObjects/responseWrapperScanReportForValidResource.dat"));
 
@@ -251,6 +263,8 @@ public class VirustotalPublicV2ImplTest {
 
     @Test
     public void testGetScanReports() throws Exception {
+        System.out.println("Test get scan reports for valid resources");
+
         String[] resources = {"5a01e158c7f7143086187982770aff1e799d95077a380353b4b1d6dfb6efc152", "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f"};
 
         final Response responseWrapper = (Response) PersistanceUtil.deSeralizeObject(new File("src/main/resources/persistedObjects/responseWrapperScanReportsForValidResources.dat"));
@@ -284,6 +298,8 @@ public class VirustotalPublicV2ImplTest {
 
     @Test(expected = QuotaExceededException.class)
     public void testGetScanReportsWhenQuotaExceeded() throws Exception {
+        System.out.println("Test get scan reports when quota exceeded");
+
         String[] resources = {"5a01e158c7f7143086187982770aff1e799d95077a380353b4b1d6dfb6efc152", "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f"};
 
         final Response responseWrapper = (Response) PersistanceUtil.deSeralizeObject(new File("src/main/resources/persistedObjects/responseWrapperScanReportsForValidResources.dat"));
