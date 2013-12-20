@@ -6,7 +6,7 @@ package com.kanishka.virustotal.dto;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author kdkanishka@gmail.com
@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class FileScanReport {
 
     @SerializedName("scans")
-    private HashMap<String, VirusScanInfo> scans;
+    private Map<String, VirusScanInfo> scans;
     @SerializedName("scan_id")
     private String scanId;
     @SerializedName("sha1")
@@ -41,11 +41,11 @@ public class FileScanReport {
     public FileScanReport() {
     }
 
-    public HashMap<String, VirusScanInfo> getScans() {
+    public Map<String, VirusScanInfo> getScans() {
         return scans;
     }
 
-    public void setScans(HashMap<String, VirusScanInfo> scans) {
+    public void setScans(Map<String, VirusScanInfo> scans) {
         this.scans = scans;
     }
 

@@ -62,7 +62,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public ScanInfo scanFile(File fileToScan) throws UnsupportedEncodingException, UnauthorizedAccessException, FileNotFoundException, Exception {
+    public ScanInfo scanFile(File fileToScan) throws UnsupportedEncodingException, UnauthorizedAccessException, FileNotFoundException, QuotaExceededException {
         if (!fileToScan.canRead()) {
             throw new FileNotFoundException("Could not access file, either the file may not exists or not accessible!");
         }
@@ -100,7 +100,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public ScanInfo[] reScanFiles(String[] resources) throws UnsupportedEncodingException, UnauthorizedAccessException, InvalidArguentsException, Exception {
+    public ScanInfo[] reScanFiles(String[] resources) throws UnsupportedEncodingException, UnauthorizedAccessException, InvalidArguentsException, QuotaExceededException {
         ScanInfo[] scanInfo = null;
         if (resources == null) {
             throw new InvalidArguentsException("Incorrect parameter \'resources\', resource should be an array with at least one element");
@@ -154,7 +154,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public FileScanReport getScanReport(String resource) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception {
+    public FileScanReport getScanReport(String resource) throws UnsupportedEncodingException, UnauthorizedAccessException, QuotaExceededException {
         Response responseWrapper = new Response();
         FileScanReport fileScanReport = new FileScanReport();
 
@@ -189,7 +189,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public FileScanReport[] getScanReports(String[] resources) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception {
+    public FileScanReport[] getScanReports(String[] resources) throws UnsupportedEncodingException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException {
         Response responseWrapper = new Response();
         FileScanReport[] fileScanReport = null;
         if (resources == null) {
@@ -242,7 +242,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public ScanInfo[] scanUrls(String[] urls) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception {
+    public ScanInfo[] scanUrls(String[] urls) throws UnsupportedEncodingException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException {
         Response responseWrapper = new Response();
         ScanInfo[] scanInfo = null;
         if (urls == null) {
@@ -296,7 +296,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public FileScanReport[] getUrlScanReport(String[] urls, boolean scan) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception {
+    public FileScanReport[] getUrlScanReport(String[] urls, boolean scan) throws UnsupportedEncodingException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException {
         Response responseWrapper = new Response();
         FileScanReport[] fileScanReport = null;
         if (urls == null) {
@@ -356,7 +356,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public IPAddressReport getIPAddresReport(String ipAddress) throws InvalidArguentsException, Exception {
+    public IPAddressReport getIPAddresReport(String ipAddress) throws InvalidArguentsException, QuotaExceededException, UnauthorizedAccessException {
         Response responseWrapper = new Response();
         IPAddressReport ipReport = new IPAddressReport();
         if (ipAddress == null) {
@@ -390,7 +390,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public DomainReport getDomainReport(String domain) throws InvalidArguentsException, Exception {
+    public DomainReport getDomainReport(String domain) throws InvalidArguentsException, UnauthorizedAccessException, QuotaExceededException {
         Response responseWrapper = new Response();
         DomainReport domainReport = new DomainReport();
         if (domain == null) {
@@ -424,7 +424,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public GeneralResponse makeAComment(String resource, String comment) throws UnsupportedEncodingException, UnauthorizedAccessException, Exception {
+    public GeneralResponse makeAComment(String resource, String comment) throws UnsupportedEncodingException, UnauthorizedAccessException, InvalidArguentsException, QuotaExceededException {
         if (resource == null || resource.length() == 0) {
             throw new InvalidArguentsException("Incorrect parameter \'resource\', it should be a string representing a hash value (md2,sha1,sha256)");
         }

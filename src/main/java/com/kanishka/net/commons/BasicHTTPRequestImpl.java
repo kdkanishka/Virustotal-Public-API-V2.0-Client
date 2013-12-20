@@ -15,6 +15,7 @@ import org.apache.http.entity.mime.MultipartEntity;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -27,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author kdkanishka@gmail.com
  */
 public class BasicHTTPRequestImpl implements HTTPRequest {
@@ -37,18 +37,17 @@ public class BasicHTTPRequestImpl implements HTTPRequest {
     }
 
 
-
     @Override
-    public Response request(String urlStr,List<Header> reqHeaders,List<FormData> formData,
-    RequestMethod requestMethod,List<MultiPartEntity> multiParts, HttpStatus httpStatus) throws Exception {
-        if(httpStatus==null){
-            httpStatus=new HttpStatus();
+    public Response request(String urlStr, List<Header> reqHeaders, List<FormData> formData,
+                            RequestMethod requestMethod, List<MultiPartEntity> multiParts, HttpStatus httpStatus) throws IOException {
+        if (httpStatus == null) {
+            httpStatus = new HttpStatus();
         }
-        List<Header> respoHeaders=new ArrayList<Header>();
-        int status=-1;
-        StringBuilder response=new StringBuilder();
+        List<Header> respoHeaders = new ArrayList<Header>();
+        int status = -1;
+        StringBuilder response = new StringBuilder();
         Response responseWrapper;
-        
+
         URL url = new URL(urlStr);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod(requestMethod.toString());
@@ -72,13 +71,8 @@ public class BasicHTTPRequestImpl implements HTTPRequest {
 
             //try to write to the output stream of the connection
             OutputStream outStream = conn.getOutputStream();
-            try {
-                multipartEntity.writeTo(outStream);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                outStream.close();
-            }
+            multipartEntity.writeTo(outStream);
+            outStream.close();
         } else {
             //add form data to the request
             if (formData != null && formData.size() > 0) {
@@ -125,15 +119,16 @@ public class BasicHTTPRequestImpl implements HTTPRequest {
             status = conn.getResponseCode();
             httpStatus.setStatusCode(conn.getResponseCode());
             httpStatus.setMessage(conn.getResponseMessage());
+            is.close();
             rd.close();
             conn.disconnect();
-        } catch (Exception e) {
+        } catch (IOException e) {
             status = conn.getResponseCode();
             httpStatus.setStatusCode(conn.getResponseCode());
             httpStatus.setMessage(conn.getResponseMessage());
             throw e;
         }
-        responseWrapper=new Response(status, response.toString(), respoHeaders);
+        responseWrapper = new Response(status, response.toString(), respoHeaders);
         return responseWrapper;
     }
 }
