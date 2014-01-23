@@ -1,15 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.kanishka.virustotal.dto;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author kdkanishka@gmail.com
+ * Created by kanishka on 1/23/14.
  */
-public class Resolution {
+public class DomainResolution {
 
     @SerializedName("last_resolved")
     private String lastResolved;
@@ -31,5 +27,4 @@ public class Resolution {
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
-
 }

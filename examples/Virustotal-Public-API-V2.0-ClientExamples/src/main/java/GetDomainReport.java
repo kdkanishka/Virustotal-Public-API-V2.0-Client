@@ -1,7 +1,4 @@
-import com.kanishka.virustotal.dto.DomainReport;
-import com.kanishka.virustotal.dto.Resolution;
-import com.kanishka.virustotal.dto.Sample;
-import com.kanishka.virustotal.dto.URL;
+import com.kanishka.virustotal.dto.*;
 import com.kanishka.virustotal.exception.APIKeyNotFoundException;
 import com.kanishka.virustotal.exception.UnauthorizedAccessException;
 import com.kanishka.virustotalv2.VirusTotalConfig;
@@ -53,10 +50,10 @@ public class GetDomainReport {
                 }
             }
 
-            Resolution[] resolutions = report.getResolutions();
+            DomainResolution[] resolutions = report.getResolutions();
             if (resolutions != null) {
                 System.out.println("Resolutions");
-                for (Resolution resolution : resolutions) {
+                for (DomainResolution resolution : resolutions) {
                     System.out.println("IP Address : " + resolution.getIpAddress());
                     System.out.println("Last Resolved : " + resolution.getLastResolved());
                 }

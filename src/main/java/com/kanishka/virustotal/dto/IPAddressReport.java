@@ -16,7 +16,7 @@ public class IPAddressReport {
     @SerializedName("detected_downloaded_samples")
     private Sample[] detectedDownloadedSamples;
     @SerializedName("resolutions")
-    private Resolution[] resolutions;
+    private IPAddressResolution[] resolutions;
     @SerializedName("detected_communicating_samples")
     private Sample[] detectedCommunicatingSamples;
     @SerializedName("undetected_communicating_samples")
@@ -44,11 +44,11 @@ public class IPAddressReport {
         System.arraycopy(detectedDownloadedSamples, 0, this.detectedDownloadedSamples, 0, detectedDownloadedSamples.length);
     }
 
-    public Resolution[] getResolutions() {
+    public IPAddressResolution[] getResolutions() {
         return resolutions;
     }
 
-    public void setResolutions(Resolution[] resolutions) {
+    public void setResolutions(IPAddressResolution[] resolutions) {
         System.arraycopy(resolutions, 0, this.resolutions, 0, resolutions.length);
     }
 
