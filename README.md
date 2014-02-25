@@ -1,4 +1,4 @@
-Virustotal-Public-API-V2.0-Client[![Build Status](https://api.travis-ci.org/kdkanishka/Virustotal-Public-API-V2.0-Client.png)]
+Virustotal-Public-API-V2.0-Client[![Build Status](https://api.travis-ci.org/kdkanishka/Virustotal-Public-API-V2.0-Client.png)](https://travis-ci.org/kdkanishka/Virustotal-Public-API-V2.0-Client)
 =================================
 
 
