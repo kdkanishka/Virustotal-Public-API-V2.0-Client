@@ -47,12 +47,12 @@ How to use API
             System.out.println("MD5 :\t" + scanInformation.getMd5());
             System.out.println("Perma Link :\t" + scanInformation.getPermalink());
             System.out.println("Resource :\t" + scanInformation.getResource());
-            System.out.println("Scan Date :\t" + scanInformation.getScan_date());
-            System.out.println("Scan Id :\t" + scanInformation.getScan_id());
+            System.out.println("Scan Date :\t" + scanInformation.getScanDate());
+            System.out.println("Scan Id :\t" + scanInformation.getScanId());
             System.out.println("SHA1 :\t" + scanInformation.getSha1());
             System.out.println("SHA256 :\t" + scanInformation.getSha256());
-            System.out.println("Verbose Msg :\t" + scanInformation.getVerbose_msg());
-            System.out.println("Response Code :\t" + scanInformation.getResponse_code());
+            System.out.println("Verbose Msg :\t" + scanInformation.getVerboseMessage());
+            System.out.println("Response Code :\t" + scanInformation.getResponseCode());
             System.out.println("done.");
         } catch (APIKeyNotFoundException ex) {
             System.err.println("API Key not found! " + ex.getMessage());
@@ -79,12 +79,12 @@ How to use API
             System.out.println("MD5 :\t" + report.getMd5());
             System.out.println("Perma link :\t" + report.getPermalink());
             System.out.println("Resourve :\t" + report.getResource());
-            System.out.println("Scan Date :\t" + report.getScan_date());
-            System.out.println("Scan Id :\t" + report.getScan_id());
+            System.out.println("Scan Date :\t" + report.getScanDate());
+            System.out.println("Scan Id :\t" + report.getScanId());
             System.out.println("SHA1 :\t" + report.getSha1());
             System.out.println("SHA256 :\t" + report.getSha256());
-            System.out.println("Verbose Msg :\t" + report.getVerbose_msg());
-            System.out.println("Response Code :\t" + report.getResponse_code());
+            System.out.println("Verbose Msg :\t" + report.getVerboseMessage());
+            System.out.println("Response Code :\t" + report.getResponseCode());
             System.out.println("Positives :\t" + report.getPositives());
             System.out.println("Total :\t" + report.getTotal());
 
@@ -123,12 +123,12 @@ How to use API
                 System.out.println("MD5 :\t" + scanInformation.getMd5());
                 System.out.println("Perma Link :\t" + scanInformation.getPermalink());
                 System.out.println("Resource :\t" + scanInformation.getResource());
-                System.out.println("Scan Date :\t" + scanInformation.getScan_date());
-                System.out.println("Scan Id :\t" + scanInformation.getScan_id());
+                System.out.println("Scan Date :\t" + scanInformation.getScanDate());
+                System.out.println("Scan Id :\t" + scanInformation.getScanId());
                 System.out.println("SHA1 :\t" + scanInformation.getSha1());
                 System.out.println("SHA256 :\t" + scanInformation.getSha256());
-                System.out.println("Verbose Msg :\t" + scanInformation.getVerbose_msg());
-                System.out.println("Response Code :\t" + scanInformation.getResponse_code());
+                System.out.println("Verbose Msg :\t" + scanInformation.getVerboseMessage());
+                System.out.println("Response Code :\t" + scanInformation.getResponseCode());
                 System.out.println("done.");
             }
 
@@ -160,12 +160,12 @@ How to use API
                 System.out.println("MD5 :\t" + report.getMd5());
                 System.out.println("Perma link :\t" + report.getPermalink());
                 System.out.println("Resourve :\t" + report.getResource());
-                System.out.println("Scan Date :\t" + report.getScan_date());
-                System.out.println("Scan Id :\t" + report.getScan_id());
+                System.out.println("Scan Date :\t" + report.getScanDate());
+                System.out.println("Scan Id :\t" + report.getScanId());
                 System.out.println("SHA1 :\t" + report.getSha1());
                 System.out.println("SHA256 :\t" + report.getSha256());
-                System.out.println("Verbose Msg :\t" + report.getVerbose_msg());
-                System.out.println("Response Code :\t" + report.getResponse_code());
+                System.out.println("Verbose Msg :\t" + report.getVerboseMessage());
+                System.out.println("Response Code :\t" + report.getResponseCode());
                 System.out.println("Positives :\t" + report.getPositives());
                 System.out.println("Total :\t" + report.getTotal());
 
@@ -201,7 +201,7 @@ How to use API
 
             System.out.println("___IP Rport__");
 
-            Sample[] communicatingSamples = report.getDetected_communicating_samples();
+            Sample[] communicatingSamples = report.getDetectedCommunicatingSamples();
             if (communicatingSamples != null) {
                 System.out.println("Communicating Samples");
                 for (Sample sample : communicatingSamples) {
@@ -212,7 +212,7 @@ How to use API
                 }
             }
 
-            Sample[] detectedDownloadedSamples = report.getDetected_downloaded_samples();
+            Sample[] detectedDownloadedSamples = report.getDetectedDownloadedSamples();
             if (detectedDownloadedSamples != null) {
                 System.out.println("Detected Downloaded Samples");
                 for (Sample sample : detectedDownloadedSamples) {
@@ -223,27 +223,27 @@ How to use API
                 }
             }
 
-            URL[] urls = report.getDetected_urls();
+            URL[] urls = report.getDetectedUrls();
             if (urls != null) {
                 System.out.println("Detected URLs");
                 for (URL url : urls) {
                     System.out.println("URL : " + url.getUrl());
                     System.out.println("Positives : " + url.getPositives());
                     System.out.println("Total : " + url.getTotal());
-                    System.out.println("Scan Date" + url.getScan_date());
+                    System.out.println("Scan Date" + url.getScanDate());
                 }
             }
 
-            Resolution[] resolutions = report.getResolutions();
+            IPAddressResolution[] resolutions = report.getResolutions();
             if (resolutions != null) {
                 System.out.println("Resolutions");
-                for (Resolution resolution : resolutions) {
-                    System.out.println("IP Address : " + resolution.getIp_address());
-                    System.out.println("Last Resolved : " + resolution.getLast_resolved());
+                for (IPAddressResolution resolution : resolutions) {
+                    System.out.println("Host Name : " + resolution.getHostName());
+                    System.out.println("Last Resolved : " + resolution.getLastResolved());
                 }
             }
 
-            Sample[] unDetectedDownloadedSamples = report.getUndetected_downloaded_samples();
+            Sample[] unDetectedDownloadedSamples = report.getUndetectedDownloadedSamples();
             if (unDetectedDownloadedSamples != null) {
                 System.out.println("Undetected Downloaded Samples");
                 for (Sample sample : unDetectedDownloadedSamples) {
@@ -254,7 +254,7 @@ How to use API
                 }
             }
 
-            Sample[] unDetectedCommunicatingSamples = report.getUndetected_communicating_samples();
+            Sample[] unDetectedCommunicatingSamples = report.getUndetectedDownloadedSamples();
             if (unDetectedCommunicatingSamples != null) {
                 System.out.println("Undetected Communicating Samples");
                 for (Sample sample : unDetectedCommunicatingSamples) {
@@ -265,8 +265,8 @@ How to use API
                 }
             }
 
-            System.out.println("Response Code : " + report.getResponse_code());
-            System.out.println("Verbose Message : " + report.getVerbose_msg());
+            System.out.println("Response Code : " + report.getResponseCode());
+            System.out.println("Verbose Message : " + report.getVerboseMessage());
 
 
 
@@ -291,7 +291,7 @@ How to use API
             DomainReport report = virusTotalRef.getDomainReport("www.ntt62.com");
             System.out.println("___Domain Rport__");
 
-            Sample[] communicatingSamples = report.getDetected_communicating_samples();
+            Sample[] communicatingSamples = report.getDetectedCommunicatingSamples();
             if (communicatingSamples != null) {
                 System.out.println("Communicating Samples");
                 for (Sample sample : communicatingSamples) {
@@ -302,7 +302,7 @@ How to use API
                 }
             }
 
-            Sample[] detectedDownloadedSamples = report.getDetected_downloaded_samples();
+            Sample[] detectedDownloadedSamples = report.getDetectedDownloadedSamples();
             if (detectedDownloadedSamples != null) {
                 System.out.println("Detected Downloaded Samples");
                 for (Sample sample : detectedDownloadedSamples) {
@@ -313,7 +313,7 @@ How to use API
                 }
             }
 
-            URL[] urls = report.getDetected_urls();
+            URL[] urls = report.getDetectedUrls();
             if (urls != null) {
                 System.out.println("Detected URLs");
                 for (URL url : urls) {
@@ -324,16 +324,16 @@ How to use API
                 }
             }
 
-            Resolution[] resolutions = report.getResolutions();
+            IPAddressResolution[] resolutions = report.getResolutions();
             if (resolutions != null) {
                 System.out.println("Resolutions");
                 for (Resolution resolution : resolutions) {
-                    System.out.println("IP Address : " + resolution.getIp_address());
-                    System.out.println("Last Resolved : " + resolution.getLast_resolved());
+                    System.out.println("Host Name : " + resolution.getHostName());
+                    System.out.println("Last Resolved : " + resolution.getLastResolved());
                 }
             }
 
-            Sample[] unDetectedDownloadedSamples = report.getUndetected_downloaded_samples();
+            Sample[] unDetectedDownloadedSamples = report.getUndetectedDownloadedSamples();
             if (unDetectedDownloadedSamples != null) {
                 System.out.println("Undetected Downloaded Samples");
                 for (Sample sample : unDetectedDownloadedSamples) {
@@ -344,7 +344,7 @@ How to use API
                 }
             }
 
-            Sample[] unDetectedCommunicatingSamples = report.getUndetected_communicating_samples();
+            Sample[] unDetectedCommunicatingSamples = report.getUndetectedCommunicatingSamples();
             if (unDetectedCommunicatingSamples != null) {
                 System.out.println("Undetected Communicating Samples");
                 for (Sample sample : unDetectedCommunicatingSamples) {
@@ -355,8 +355,8 @@ How to use API
                 }
             }
 
-            System.out.println("Response Code : " + report.getResponse_code());
-            System.out.println("Verbose Message : " + report.getVerbose_msg());
+            System.out.println("Response Code : " + report.getResponseCode());
+            System.out.println("Verbose Message : " + report.getVerboseMessage());
 
 
 
@@ -382,8 +382,8 @@ How to use API
             String comment = "Eicar file! considered a goodware";
             GeneralResponse gRespo = virusTotalRef.makeAComment(resource, comment);
 
-            System.out.println("Response Code : " + gRespo.getResponse_code());
-            System.out.println("Verbose Message : " + gRespo.getVerbose_msg());
+            System.out.println("Response Code : " + gRespo.getResponseCode());
+            System.out.println("Verbose Message : " + gRespo.getVerboseMessage());
 
         } catch (APIKeyNotFoundException ex) {
             System.err.println("API Key not found! " + ex.getMessage());
