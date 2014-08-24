@@ -36,10 +36,13 @@ public class BasicHTTPRequestImpl implements HTTPRequest {
 
     }
 
-
     @Override
-    public Response request(String urlStr, List<Header> reqHeaders, List<FormData> formData,
-                            RequestMethod requestMethod, List<MultiPartEntity> multiParts, HttpStatus httpStatus) throws IOException {
+    public final Response request(final String url,
+                                  final List<Header> reqHeaders,
+                                  final List<FormData> formData,
+                                  final RequestMethod requestMethod,
+                                  final List<MultiPartEntity> multiParts,
+                                  HttpStatus httpStatus) throws IOException {
         if (httpStatus == null) {
             httpStatus = new HttpStatus();
         }
@@ -48,8 +51,8 @@ public class BasicHTTPRequestImpl implements HTTPRequest {
         StringBuilder response = new StringBuilder();
         Response responseWrapper;
 
-        URL url = new URL(urlStr);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        URL urlObj = new URL(url);
+        HttpURLConnection conn = (HttpURLConnection) urlObj.openConnection();
         conn.setRequestMethod(requestMethod.toString());
 
         if (reqHeaders != null && reqHeaders.size() > 0) {
@@ -62,12 +65,14 @@ public class BasicHTTPRequestImpl implements HTTPRequest {
 
         //add multipart entities
         if (multiParts != null && multiParts.size() > 0) {
-            MultipartEntity multipartEntity = new MultipartEntity(HttpMultipartMode.STRICT);
+            MultipartEntity multipartEntity =
+                    new MultipartEntity(HttpMultipartMode.STRICT);
             for (MultiPartEntity part : multiParts) {
                 multipartEntity.addPart(part.getPartName(), part.getEntity());
             }
             conn.setDoOutput(true);
-            conn.setRequestProperty("Content-Type", multipartEntity.getContentType().getValue());
+            conn.setRequestProperty("Content-Type",
+                    multipartEntity.getContentType().getValue());
 
             //try to write to the output stream of the connection
             OutputStream outStream = conn.getOutputStream();
@@ -80,15 +85,18 @@ public class BasicHTTPRequestImpl implements HTTPRequest {
                 StringBuilder content = new StringBuilder();
                 while (itrFormData.hasNext()) {
                     FormData formDataObj = itrFormData.next();
-                    content.append(URLEncoder.encode(formDataObj.getKey(), "UTF-8"));
+                    content.append(URLEncoder.encode(formDataObj.getKey(),
+                            "UTF-8"));
                     content.append("=");
-                    content.append(URLEncoder.encode(formDataObj.getValue(), "UTF-8"));
+                    content.append(URLEncoder.encode(formDataObj.getValue(),
+                            "UTF-8"));
                     content.append("&");
                 }
                 if (content.length() > 0) {
                     conn.setDoOutput(true);
                     //Send request
-                    DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+                    DataOutputStream wr =
+                            new DataOutputStream(conn.getOutputStream());
                     wr.writeBytes(content.toString());
                     wr.flush();
                     wr.close();
@@ -128,7 +136,8 @@ public class BasicHTTPRequestImpl implements HTTPRequest {
             httpStatus.setMessage(conn.getResponseMessage());
             throw e;
         }
-        responseWrapper = new Response(status, response.toString(), respoHeaders);
+        responseWrapper = new Response(status, response.toString(),
+                respoHeaders);
         return responseWrapper;
     }
 }

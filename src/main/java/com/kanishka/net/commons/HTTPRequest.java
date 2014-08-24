@@ -19,6 +19,9 @@ import java.util.List;
  */
 public interface HTTPRequest {
 
-    Response request(String urlStr, List<Header> reqHeaders, List<FormData> formData,
-                     RequestMethod requestMethod, List<MultiPartEntity> multiParts, HttpStatus httpStatus) throws IOException;
+    Response request(String urlStr, List<Header> reqHeaders,
+                     List<FormData> formData,
+                     RequestMethod requestMethod,
+                     List<MultiPartEntity> multiParts,
+                     HttpStatus httpStatus) throws IOException;
 }
