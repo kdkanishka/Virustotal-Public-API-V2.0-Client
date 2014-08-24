@@ -18,17 +18,17 @@ Getting started
 2. OR [Download] the project as a zip file and extract
  - `https://github.com/kdkanishka/Virustotal-Public-API-V2.0-Client/archive/master.zip`
 3. Build and install the project using maven
- - `mvn clean install -DskipTests`
+ - `mvn clean compile assembly:single -DskipTests`
 4. Add following dependency to your maven project
 
 ``` xml
 <dependency>
       <groupId>com.kanishka.api</groupId>
       <artifactId>VirustotalPublicV2.0</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.1.GA-SNAPSHOT</version>
 </dependency>
 ```
-* If your project is not maven based, add `target/VirustotalPublicV2.0-1.0-SNAPSHOT.jar` file to your class path.
+* If your project is not maven based, add `target/VirustotalPublicV2.0-1.1.GA-SNAPSHOT-jar-with-dependencies.jar` file to your class path.
 
 How to use API
 ---------------------
