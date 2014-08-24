@@ -6,13 +6,13 @@
 
     <groupId>Virustotal-Public-API-V2.0-ClientExamples</groupId>
     <artifactId>Virustotal-Public-API-V2.0-ClientExamples</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1.GA-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
             <groupId>com.kanishka.api</groupId>
             <artifactId>VirustotalPublicV2.0</artifactId>
-            <version>1.1.GA</version>
+            <version>1.1.GA-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

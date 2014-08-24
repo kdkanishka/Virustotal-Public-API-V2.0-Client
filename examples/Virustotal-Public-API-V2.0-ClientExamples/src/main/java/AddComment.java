@@ -17,7 +17,7 @@ public class AddComment {
             VirusTotalConfig.getConfigInstance().setVirusTotalAPIKey(ApiDetails.API_KEY);
             VirustotalPublicV2 virusTotalRef = new VirustotalPublicV2Impl();
 
-            String resource = "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f";
+            String resource = "44d88612fea8a8f36de82e1278abb02f";
             String comment = "Eicar file! considered a goodware :)";
             GeneralResponse gRespo = virusTotalRef.makeAComment(resource, comment);
 

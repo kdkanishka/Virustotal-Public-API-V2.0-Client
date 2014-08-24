@@ -7,6 +7,7 @@ package com.kanishka.virustotalv2;
 import com.google.gson.Gson;
 import com.kanishka.net.commons.BasicHTTPRequestImpl;
 import com.kanishka.net.commons.HTTPRequest;
+import com.kanishka.net.model.FormData;
 import com.kanishka.net.model.HttpStatus;
 import com.kanishka.net.model.MultiPartEntity;
 import com.kanishka.net.model.RequestMethod;
@@ -85,15 +86,15 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
-            } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
-                //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
             scanInfo = gsonProcessor.fromJson(serviceResponse, ScanInfo.class);
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
+            //limit exceeded
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         }
         return scanInfo;
 
@@ -133,9 +134,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
-            } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
-                //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 
@@ -148,6 +146,9 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
                 ScanInfo scanInfo1Elem = gsonProcessor.fromJson(serviceResponse, ScanInfo.class);
                 scanInfo = new ScanInfo[]{scanInfo1Elem};
             }
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
+            //limit exceeded
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         }
 
         return scanInfo;
@@ -174,9 +175,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
-            } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
-                //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 
@@ -184,6 +182,9 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
             fileScanReport = gsonProcessor.fromJson(serviceResponse, FileScanReport.class);
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
+            //limit exceeded
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         }
         return fileScanReport;
     }
@@ -222,9 +223,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
-            } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
-                //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 
@@ -237,6 +235,9 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
                 FileScanReport fScanRep = gsonProcessor.fromJson(serviceResponse, FileScanReport.class);
                 fileScanReport = new FileScanReport[]{fScanRep};
             }
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
+            //limit exceeded
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         }
         return fileScanReport;
     }
@@ -276,9 +277,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
-            } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
-                //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 
@@ -291,6 +289,9 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
                 ScanInfo scanInforElem = gsonProcessor.fromJson(serviceResponse, ScanInfo.class);
                 scanInfo = new ScanInfo[]{scanInforElem};
             }
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
+            //limit exceeded
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         }
         return scanInfo;
     }
@@ -308,10 +309,10 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
         StringBuilder resourceStr = new StringBuilder();
         for (String resource : urls) {
-            resourceStr.append(resource).append(", ");
+            resourceStr.append(resource).append("\n");
         }
         //clean up resource string
-        int lastCommaIdx = resourceStr.lastIndexOf(",");
+        int lastCommaIdx = resourceStr.lastIndexOf("\n");
         if (lastCommaIdx > 0) {
             resourceStr.deleteCharAt(lastCommaIdx);
         }
@@ -336,9 +337,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
-            } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
-                //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 
@@ -351,6 +349,9 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
                 FileScanReport fileScanReportElem = gsonProcessor.fromJson(serviceResponse, FileScanReport.class);
                 fileScanReport = new FileScanReport[]{fileScanReportElem};
             }
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
+            //limit exceeded
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         }
         return fileScanReport;
     }
@@ -375,9 +376,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
-            } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
-                //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 
@@ -385,6 +383,9 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
             ipReport = gsonProcessor.fromJson(serviceResponse, IPAddressReport.class);
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
+            //limit exceeded
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         }
         return ipReport;
     }
@@ -409,9 +410,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
-            } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
-                //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 
@@ -419,6 +417,9 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
             domainReport = gsonProcessor.fromJson(serviceResponse, DomainReport.class);
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
+            //limit exceeded
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         }
         return domainReport;
     }
@@ -441,20 +442,19 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         multiParts.add(apikey);
         multiParts.add(resourcePart);
         multiParts.add(commentPart);
+        List<FormData> formData = new ArrayList<FormData>();
+
         HttpStatus httpStatus = new HttpStatus();
         Integer statusCode = -1;
 
         try {
-            responseWrapper = httpRequestObject.request(URI_VT2_PUT_COMMENT, null, null, RequestMethod.POST, null, httpStatus);
+            responseWrapper = httpRequestObject.request(URI_VT2_PUT_COMMENT, null, null, RequestMethod.POST, multiParts, httpStatus);
             statusCode = httpStatus.getStatusCode();
         } catch (IOException e) {
             statusCode = httpStatus.getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
-            } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
-                //limit exceeded
-                throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM, e);
             }
         }
 
@@ -462,6 +462,9 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
             generalResponse = gsonProcessor.fromJson(serviceResponse, GeneralResponse.class);
+        } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
+            //limit exceeded
+            throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
         }
         return generalResponse;
     }

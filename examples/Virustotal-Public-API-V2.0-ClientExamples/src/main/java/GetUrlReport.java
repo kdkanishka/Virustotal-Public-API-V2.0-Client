@@ -18,11 +18,12 @@ public class GetUrlReport {
             VirusTotalConfig.getConfigInstance().setVirusTotalAPIKey(ApiDetails.API_KEY);
             VirustotalPublicV2 virusTotalRef = new VirustotalPublicV2Impl();
 
-            String urls[] = {"mahamegha.com","mahamegha.info"};
+            String urls[] = {"http://www.toll-net.be/ ","www.google.lk"};
             FileScanReport[] reports = virusTotalRef.getUrlScanReport(urls, false);
 
             for (FileScanReport report : reports) {
                 if(report.getResponseCode()==0){
+                    System.out.println("Verbose Msg :\t" + report.getVerboseMessage());
                     continue;
                 }
                 System.out.println("MD5 :\t" + report.getMd5());

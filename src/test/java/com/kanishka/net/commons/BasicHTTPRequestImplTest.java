@@ -5,7 +5,6 @@
 package com.kanishka.net.commons;
 
 import com.google.gson.Gson;
-import com.kanishka.net.exception.RequestNotComplete;
 import com.kanishka.net.model.FormData;
 import com.kanishka.net.model.Header;
 import com.kanishka.net.model.HttpStatus;

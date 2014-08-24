@@ -1,3 +1,7 @@
-/src/main/java/App.java
 /target/
 /.idea
+VirustotalPublicV2.0.iml
+/examples/Virustotal-Public-API-V2.0-ClientExamples/.idea
+/examples/Virustotal-Public-API-V2.0-ClientExamples/target
+/examples/Virustotal-Public-API-V2.0-ClientExamples/.idea/libraries
+/examples/Virustotal-Public-API-V2.0-ClientExamples/Virustotal-Public-API-V2.0-ClientExamples.iml
