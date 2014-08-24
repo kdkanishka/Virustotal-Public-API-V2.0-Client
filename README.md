@@ -396,6 +396,18 @@ How to use API
         }
     }
 ```
+Developer guide
+---------------
+To generate checkstyle report
+```
+mvn clean checkstyle:checkstyle
+```
+
+To generate jacoco report
+```
+mvn test jacoco:report
+```
+
 ### Support or Contact
 Having trouble with this api ? contact kdkanishka@gmail.com and I'll help you to sort it out.
 
