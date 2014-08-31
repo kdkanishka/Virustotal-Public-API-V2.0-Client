@@ -8,8 +8,6 @@ import com.google.gson.Gson;
 import com.kanishka.net.commons.BasicHTTPRequestImpl;
 import com.kanishka.net.commons.HTTPRequest;
 import com.kanishka.net.exception.RequestNotComplete;
-import com.kanishka.net.model.FormData;
-import com.kanishka.net.model.HttpStatus;
 import com.kanishka.net.model.MultiPartEntity;
 import com.kanishka.net.model.RequestMethod;
 import com.kanishka.net.model.Response;
@@ -28,7 +26,6 @@ import org.apache.http.entity.mime.content.StringBody;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,6 +70,8 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     private static final String ERR_COMMENTING = "Could not publish the " +
             "comment," +
             " API error occured!";
+
+    public static final String URLS_LITERAL = "urls";
 
     private HTTPRequest httpRequestObject;
 
@@ -125,8 +124,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
                         e);
             }
-        } catch (IOException e) {
-            throw e;
         }
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
@@ -182,8 +179,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
                         e);
             }
-        } catch (IOException e) {
-            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
@@ -233,8 +228,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
                         e);
             }
-        } catch (IOException e) {
-            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
@@ -291,8 +284,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
                         e);
             }
-        } catch (IOException e) {
-            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
@@ -321,11 +312,11 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         Response responseWrapper = new Response();
         ScanInfo[] scanInfo = null;
         if (urls == null) {
-            String errorMsg = String.format(ERR_MSG_INCORRECT_PARAM, "urls");
+            String errorMsg = String.format(ERR_MSG_INCORRECT_PARAM, URLS_LITERAL);
             throw new InvalidArguentsException(errorMsg);
         } else if (urls.length > VT2_MAX_ALLOWED_URLS_PER_REQUEST) {
-            String errMsg = String.format(ERR_MSG2_INCORRECT_PARAM, "urls",
-                    VT2_MAX_ALLOWED_URLS_PER_REQUEST, "urls");
+            String errMsg = String.format(ERR_MSG2_INCORRECT_PARAM, URLS_LITERAL,
+                    VT2_MAX_ALLOWED_URLS_PER_REQUEST, URLS_LITERAL);
             throw new InvalidArguentsException(errMsg);
         }
         MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD,
@@ -358,8 +349,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
                         e);
             }
-        } catch (IOException e) {
-            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
@@ -431,8 +420,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
                         e);
             }
-        } catch (IOException e) {
-            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
@@ -481,8 +468,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
                         e);
             }
-        } catch (IOException e) {
-            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
@@ -524,8 +509,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
                         e);
             }
-        } catch (IOException e) {
-            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
@@ -580,8 +563,6 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
                 throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
                         e);
             }
-        } catch (IOException e) {
-            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {

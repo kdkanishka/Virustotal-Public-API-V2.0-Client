@@ -14,9 +14,7 @@ import com.kanishka.virustotal.exception.QuotaExceededException;
 import com.kanishka.virustotal.exception.UnauthorizedAccessException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 /**
  * @author kdkanishka@gmail.com

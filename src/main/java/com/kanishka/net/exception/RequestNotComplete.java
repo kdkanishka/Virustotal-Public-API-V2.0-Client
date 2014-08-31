@@ -11,7 +11,7 @@ import com.kanishka.net.model.HttpStatus;
  */
 public class RequestNotComplete extends Exception {
 
-    HttpStatus httpStatus;
+    private HttpStatus httpStatus;
 
     public RequestNotComplete(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
