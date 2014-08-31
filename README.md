@@ -407,6 +407,10 @@ To generate jacoco report
 ```
 mvn test jacoco:report
 ```
+To run system tests
+```
+mvn clean test -Psystem-tests
+```
 
 ### Support or Contact
 Having trouble with this api ? contact kdkanishka@gmail.com and I'll help you to sort it out.

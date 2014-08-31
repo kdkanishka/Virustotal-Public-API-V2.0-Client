@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -41,7 +42,9 @@
 
 
     <name>VirustotalPublicV2.0</name>
-    <description>Please refer to https://github.com/kdkanishka/Virustotal-Public-API-V2.0-Client</description>
+    <description>Please refer to
+        https://github.com/kdkanishka/Virustotal-Public-API-V2.0-Client
+    </description>
 
     <url>https://github.com/kdkanishka/Virustotal-Public-API-V2.0-Client</url>
 
@@ -76,14 +79,22 @@
     </prerequisites>
 
     <issueManagement>
-        <url>https://github.com/kdkanishka/Virustotal-Public-API-V2.0-Client/issues</url>
+        <url>
+            https://github.com/kdkanishka/Virustotal-Public-API-V2.0-Client/issues
+        </url>
         <system>GitHub Issues</system>
     </issueManagement>
 
     <scm>
-        <connection>scm:git@github.com:kdkanishka/Virustotal-Public-API-V2.0-Client.git</connection>
-        <developerConnection>scm:git@github.com:kdkanishka/Virustotal-Public-API-V2.0-Client.git</developerConnection>
-        <url>https://github.com/kdkanishka/Virustotal-Public-API-V2.0-Client.git</url>
+        <connection>
+            scm:git@github.com:kdkanishka/Virustotal-Public-API-V2.0-Client.git
+        </connection>
+        <developerConnection>
+            scm:git@github.com:kdkanishka/Virustotal-Public-API-V2.0-Client.git
+        </developerConnection>
+        <url>
+            https://github.com/kdkanishka/Virustotal-Public-API-V2.0-Client.git
+        </url>
     </scm>
 
     <properties>
@@ -175,7 +186,8 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>2.10</version>
                 <configuration>
-                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <includeTestSourceDirectory>true
+                    </includeTestSourceDirectory>
                     <consoleOutput>true</consoleOutput>
                     <logViolationsToConsole>true</logViolationsToConsole>
                     <failOnViolation>true</failOnViolation>
@@ -196,8 +208,43 @@
                     </descriptorRefs>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*SystemTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>system-tests</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <includes>
+                                <include>**/*SystemTest.java</include>
+                            </includes>
+                            <excludes>
+                                <exclude>**/*StagingSystemTest.java
+                                </exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 
 </project>
