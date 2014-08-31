@@ -4,24 +4,35 @@
  */
 package com.kanishka.net.exception;
 
+import com.kanishka.net.model.HttpStatus;
+
 /**
- *
  * @author kdkanishka@gmail.com
  */
 public class RequestNotComplete extends Exception {
 
-    public RequestNotComplete() {
+    HttpStatus httpStatus;
+
+    public RequestNotComplete(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
     }
 
-    public RequestNotComplete(String message) {
+    public RequestNotComplete(String message, HttpStatus httpStatus) {
         super(message);
+        this.httpStatus = httpStatus;
     }
 
-    public RequestNotComplete(String message, Throwable cause) {
+    public RequestNotComplete(String message, Throwable cause, HttpStatus httpStatus) {
         super(message, cause);
+        this.httpStatus = httpStatus;
     }
 
-    public RequestNotComplete(Throwable cause) {
+    public RequestNotComplete(Throwable cause, HttpStatus httpStatus) {
         super(cause);
+        this.httpStatus = httpStatus;
+    }
+
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
     }
 }

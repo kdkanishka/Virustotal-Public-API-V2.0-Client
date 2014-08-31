@@ -4,6 +4,7 @@
  */
 package com.kanishka.net.commons;
 
+import com.kanishka.net.exception.RequestNotComplete;
 import com.kanishka.net.model.FormData;
 import com.kanishka.net.model.Header;
 import com.kanishka.net.model.HttpStatus;
@@ -41,13 +42,10 @@ public class BasicHTTPRequestImpl implements HTTPRequest {
                                   final List<Header> reqHeaders,
                                   final List<FormData> formData,
                                   final RequestMethod requestMethod,
-                                  final List<MultiPartEntity> multiParts,
-                                  HttpStatus httpStatus) throws IOException {
-        if (httpStatus == null) {
-            httpStatus = new HttpStatus();
-        }
+                                  final List<MultiPartEntity> multiParts
+    ) throws RequestNotComplete , IOException{
+        HttpStatus httpStatus = new HttpStatus();
         List<Header> respoHeaders = new ArrayList<Header>();
-        int status = -1;
         StringBuilder response = new StringBuilder();
         Response responseWrapper;
 
@@ -124,20 +122,21 @@ public class BasicHTTPRequestImpl implements HTTPRequest {
                 response.append(line);
                 response.append('\r');
             }
-            status = conn.getResponseCode();
+            httpStatus.setStatusCode(conn.getResponseCode());
             httpStatus.setStatusCode(conn.getResponseCode());
             httpStatus.setMessage(conn.getResponseMessage());
             is.close();
             rd.close();
             conn.disconnect();
-        } catch (IOException e) {
-            status = conn.getResponseCode();
+        } catch (Throwable e) {
+            httpStatus.setStatusCode(conn.getResponseCode());
             httpStatus.setStatusCode(conn.getResponseCode());
             httpStatus.setMessage(conn.getResponseMessage());
-            throw e;
+            throw new RequestNotComplete("Could not complete the request",e,
+                    httpStatus);
         }
-        responseWrapper = new Response(status, response.toString(),
-                respoHeaders);
+        responseWrapper = new Response(httpStatus.getStatusCode(),
+                response.toString(),respoHeaders);
         return responseWrapper;
     }
 }

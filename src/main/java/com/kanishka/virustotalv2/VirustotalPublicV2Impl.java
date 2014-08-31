@@ -7,6 +7,7 @@ package com.kanishka.virustotalv2;
 import com.google.gson.Gson;
 import com.kanishka.net.commons.BasicHTTPRequestImpl;
 import com.kanishka.net.commons.HTTPRequest;
+import com.kanishka.net.exception.RequestNotComplete;
 import com.kanishka.net.model.FormData;
 import com.kanishka.net.model.HttpStatus;
 import com.kanishka.net.model.MultiPartEntity;
@@ -37,11 +38,42 @@ import java.util.List;
 public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
 
     private Gson gsonProcessor;
+
     private String apiKey;
+
     private static final String API_KEY_FIELD = "apikey";
+
     private static final String RESOURCE_FIELD = "resource";
-    private static final String ERR_MSG_EXCEED_MAX_REQ_PM = "Exceeded maximum number of requests per minute, Please try again later.";
+
+    private static final String ERR_MSG_EXCEED_MAX_REQ_PM = "Exceeded maximum" +
+            " number of requests per minute, Please try again later.";
+
     private static final String ERR_MSG_INVALID_API_KEY = "Invalid api key";
+
+    private static final String ERR_MSG_API_KEY_NOT_FOUND =
+            "API Key is not set. Please set api key.\nSample :" +
+                    " VirusTotalConfig.getConfigInstance()." +
+                    "setVirusTotalAPIKey(\"APIKEY\")";
+
+    private static final String ERR_MSG_FILE_NOT_FOUND =
+            "Could not access file, either the file may not exists or not" +
+                    " accessible!";
+
+    private static final String ERR_MSG_INCORRECT_PARAM =
+            "Incorrect parameter \'%s\', resource should be an array" +
+                    " with at least one element";
+
+    private static final String ERR_MSG2_INCORRECT_PARAM =
+            "Incorrect parameter \'%s\' , " +
+                    "maximum number(%d) of %s per request has been exceeded.";
+
+    private static final String ERR_MSG3_INCORRECT_PARAM =
+            "Incorrect parameter '%s', it should be a valid %s";
+
+    private static final String ERR_COMMENTING = "Could not publish the " +
+            "comment," +
+            " API error occured!";
+
     private HTTPRequest httpRequestObject;
 
     public VirustotalPublicV2Impl() throws APIKeyNotFoundException {
@@ -49,7 +81,8 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         httpRequestObject = new BasicHTTPRequestImpl();
     }
 
-    public VirustotalPublicV2Impl(HTTPRequest httpRequestObject) throws APIKeyNotFoundException {
+    public VirustotalPublicV2Impl(HTTPRequest httpRequestObject) throws
+            APIKeyNotFoundException {
         initialize();
         this.httpRequestObject = httpRequestObject;
     }
@@ -58,35 +91,42 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         gsonProcessor = new Gson();
         apiKey = VirusTotalConfig.getConfigInstance().getVirusTotalAPIKey();
         if (apiKey == null || apiKey.length() == 0) {
-            throw new APIKeyNotFoundException("API Key is not set. Please set api key.\nSample : VirusTotalConfig.getConfigInstance().setVirusTotalAPIKey(\"APIKEY\")");
+            throw new APIKeyNotFoundException(ERR_MSG_API_KEY_NOT_FOUND);
         }
     }
 
     @Override
-    public ScanInfo scanFile(File fileToScan) throws UnsupportedEncodingException, UnauthorizedAccessException, FileNotFoundException, QuotaExceededException {
+    public ScanInfo scanFile(File fileToScan) throws
+            IOException, UnauthorizedAccessException,
+            QuotaExceededException {
         if (!fileToScan.canRead()) {
-            throw new FileNotFoundException("Could not access file, either the file may not exists or not accessible!");
+            throw new FileNotFoundException(ERR_MSG_FILE_NOT_FOUND);
         }
         Response responseWrapper = new Response();
         ScanInfo scanInfo = new ScanInfo();
 
         FileBody fileBody = new FileBody(fileToScan);
         MultiPartEntity file = new MultiPartEntity("file", fileBody);
-        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
+        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD,
+                new StringBody(apiKey));
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(file);
         multiParts.add(apikey);
         Integer statusCode = -1;
-        HttpStatus httpStatus = new HttpStatus();
+
         try {
-            responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN, null, null, RequestMethod.GET, multiParts, httpStatus);
-            statusCode = httpStatus.getStatusCode();
-        } catch (IOException e) {
-            statusCode = httpStatus.getStatusCode();
+            responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN,
+                    null, null, RequestMethod.GET, multiParts);
+            statusCode = responseWrapper.getStatus();
+        } catch (RequestNotComplete e) {
+            statusCode = e.getHttpStatus().getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
+                        e);
             }
+        } catch (IOException e) {
+            throw e;
         }
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
@@ -101,14 +141,19 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public ScanInfo[] reScanFiles(String[] resources) throws UnsupportedEncodingException, UnauthorizedAccessException, InvalidArguentsException, QuotaExceededException {
+    public ScanInfo[] reScanFiles(String[] resources) throws
+            IOException, UnauthorizedAccessException,
+            InvalidArguentsException, QuotaExceededException {
         ScanInfo[] scanInfo = null;
         if (resources == null) {
-            throw new InvalidArguentsException("Incorrect parameter \'resources\', resource should be an array with at least one element");
+            String errorMsg = String.format(ERR_MSG_INCORRECT_PARAM,
+                    "resources");
+            throw new InvalidArguentsException(errorMsg);
         }
         Response responseWrapper = new Response();
 
-        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
+        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD,
+                new StringBody(apiKey));
         StringBuilder resourceStr = new StringBuilder();
         for (String resource : resources) {
             resourceStr.append(resource).append(", ");
@@ -119,31 +164,38 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             resourceStr.deleteCharAt(lastCommaIdx);
         }
 
-        MultiPartEntity part = new MultiPartEntity(RESOURCE_FIELD, new StringBody(resourceStr.toString()));
+        MultiPartEntity part = new MultiPartEntity(RESOURCE_FIELD,
+                new StringBody(resourceStr.toString()));
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(part);
         multiParts.add(apikey);
-        HttpStatus httpStatus = new HttpStatus();
         Integer statusCode = -1;
 
         try {
-            responseWrapper = httpRequestObject.request(URI_VT2_RESCAN, null, null, RequestMethod.POST, multiParts, httpStatus);
-            statusCode = httpStatus.getStatusCode();
-        } catch (IOException e) {
-            statusCode = httpStatus.getStatusCode();
+            responseWrapper = httpRequestObject.request(URI_VT2_RESCAN,
+                    null, null, RequestMethod.POST, multiParts);
+            statusCode = responseWrapper.getStatus();
+        } catch (RequestNotComplete e) {
+            statusCode = e.getHttpStatus().getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
+                        e);
             }
+        } catch (IOException e) {
+            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
             if (resources.length > 1) {
-                scanInfo = gsonProcessor.fromJson(serviceResponse, ScanInfo[].class);
+                scanInfo =
+                        gsonProcessor.fromJson(serviceResponse,
+                                ScanInfo[].class);
             } else {
-                ScanInfo scanInfo1Elem = gsonProcessor.fromJson(serviceResponse, ScanInfo.class);
+                ScanInfo scanInfo1Elem = gsonProcessor.fromJson(serviceResponse,
+                        ScanInfo.class);
                 scanInfo = new ScanInfo[]{scanInfo1Elem};
             }
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
@@ -155,33 +207,41 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public FileScanReport getScanReport(String resource) throws UnsupportedEncodingException, UnauthorizedAccessException, QuotaExceededException {
+    public FileScanReport getScanReport(String resource)
+            throws IOException, UnauthorizedAccessException,
+            QuotaExceededException {
         Response responseWrapper = new Response();
         FileScanReport fileScanReport = new FileScanReport();
 
-        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
-        MultiPartEntity resourcePart = new MultiPartEntity(RESOURCE_FIELD, new StringBody(resource));
+        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD,
+                new StringBody(apiKey));
+        MultiPartEntity resourcePart = new MultiPartEntity(RESOURCE_FIELD,
+                new StringBody(resource));
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(apikey);
         multiParts.add(resourcePart);
-        HttpStatus httpStatus = new HttpStatus();
         Integer statusCode = -1;
 
         try {
-            responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN_REPORT, null, null, RequestMethod.POST, multiParts, httpStatus);
-            statusCode = httpStatus.getStatusCode();
-        } catch (IOException e) {
-            statusCode = httpStatus.getStatusCode();
+            responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN_REPORT
+                    , null, null, RequestMethod.POST, multiParts);
+            statusCode = responseWrapper.getStatus();
+        } catch (RequestNotComplete e) {
+            statusCode = e.getHttpStatus().getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
+                        e);
             }
+        } catch (IOException e) {
+            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
-            fileScanReport = gsonProcessor.fromJson(serviceResponse, FileScanReport.class);
+            fileScanReport = gsonProcessor.fromJson(serviceResponse,
+                    FileScanReport.class);
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
             throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
@@ -190,14 +250,19 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public FileScanReport[] getScanReports(String[] resources) throws UnsupportedEncodingException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException {
+    public FileScanReport[] getScanReports(String[] resources) throws
+            IOException, UnauthorizedAccessException,
+            QuotaExceededException, InvalidArguentsException {
         Response responseWrapper = new Response();
         FileScanReport[] fileScanReport = null;
         if (resources == null) {
-            throw new InvalidArguentsException("Incorrect parameter \'resources\', resource should be an array with at least one element");
+            String errorMsg = String.format(ERR_MSG_INCORRECT_PARAM,
+                    "resources");
+            throw new InvalidArguentsException(errorMsg);
         }
 
-        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
+        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD,
+                new StringBody(apiKey));
         StringBuilder resourceStr = new StringBuilder();
         for (String resource : resources) {
             resourceStr.append(resource).append(", ");
@@ -208,31 +273,38 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             resourceStr.deleteCharAt(lastCommaIdx);
         }
 
-        MultiPartEntity part = new MultiPartEntity(RESOURCE_FIELD, new StringBody(resourceStr.toString()));
+        MultiPartEntity part = new MultiPartEntity(RESOURCE_FIELD,
+                new StringBody(resourceStr.toString()));
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(apikey);
         multiParts.add(part);
-        HttpStatus httpStatus = new HttpStatus();
         Integer statusCode = -1;
 
         try {
-            responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN_REPORT, null, null, RequestMethod.POST, multiParts, httpStatus);
-            statusCode = httpStatus.getStatusCode();
-        } catch (IOException e) {
-            statusCode = httpStatus.getStatusCode();
+            responseWrapper = httpRequestObject.request(URI_VT2_FILE_SCAN_REPORT
+                    , null, null, RequestMethod.POST, multiParts);
+            statusCode = responseWrapper.getStatus();
+        } catch (RequestNotComplete e) {
+            statusCode = e.getHttpStatus().getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
+                        e);
             }
+        } catch (IOException e) {
+            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
             if (resources.length > 1) {
-                fileScanReport = gsonProcessor.fromJson(serviceResponse, FileScanReport[].class);
+                fileScanReport = gsonProcessor.fromJson(serviceResponse,
+                        FileScanReport[].class);
             } else {
-                FileScanReport fScanRep = gsonProcessor.fromJson(serviceResponse, FileScanReport.class);
+                FileScanReport fScanRep =
+                        gsonProcessor.fromJson(serviceResponse,
+                                FileScanReport.class);
                 fileScanReport = new FileScanReport[]{fScanRep};
             }
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
@@ -243,15 +315,21 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public ScanInfo[] scanUrls(String[] urls) throws UnsupportedEncodingException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException {
+    public ScanInfo[] scanUrls(String[] urls) throws IOException,
+            UnauthorizedAccessException, QuotaExceededException,
+            InvalidArguentsException {
         Response responseWrapper = new Response();
         ScanInfo[] scanInfo = null;
         if (urls == null) {
-            throw new InvalidArguentsException("Incorrect parameter \'urls\' , urls should be an array with at least one element ");
+            String errorMsg = String.format(ERR_MSG_INCORRECT_PARAM, "urls");
+            throw new InvalidArguentsException(errorMsg);
         } else if (urls.length > VT2_MAX_ALLOWED_URLS_PER_REQUEST) {
-            throw new InvalidArguentsException("Incorrect parameter \'urls\' , maximum number(" + VT2_MAX_ALLOWED_URLS_PER_REQUEST + ") of urls per request has been exceeded.");
+            String errMsg = String.format(ERR_MSG2_INCORRECT_PARAM, "urls",
+                    VT2_MAX_ALLOWED_URLS_PER_REQUEST, "urls");
+            throw new InvalidArguentsException(errMsg);
         }
-        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
+        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD,
+                new StringBody(apiKey));
         StringBuilder resourceStr = new StringBuilder();
         for (String url : urls) {
             resourceStr.append(url).append(VT2_URLSEPERATOR);
@@ -262,31 +340,37 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             resourceStr.deleteCharAt(lastUrlSepIdx);
         }
 
-        MultiPartEntity part = new MultiPartEntity("url", new StringBody(resourceStr.toString()));
+        MultiPartEntity part = new MultiPartEntity("url",
+                new StringBody(resourceStr.toString()));
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(apikey);
         multiParts.add(part);
-        HttpStatus httpStatus = new HttpStatus();
         Integer statusCode = -1;
 
         try {
-            responseWrapper = httpRequestObject.request(URI_VT2_URL_SCAN, null, null, RequestMethod.POST, multiParts, httpStatus);
-            statusCode = httpStatus.getStatusCode();
-        } catch (IOException e) {
-            statusCode = httpStatus.getStatusCode();
+            responseWrapper = httpRequestObject.request(URI_VT2_URL_SCAN, null,
+                    null, RequestMethod.POST, multiParts);
+            statusCode = responseWrapper.getStatus();
+        } catch (RequestNotComplete e) {
+            statusCode = e.getHttpStatus().getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
+                        e);
             }
+        } catch (IOException e) {
+            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
             if (urls.length > 1) {
-                scanInfo = gsonProcessor.fromJson(serviceResponse, ScanInfo[].class);
+                scanInfo = gsonProcessor.fromJson(serviceResponse,
+                        ScanInfo[].class);
             } else {
-                ScanInfo scanInforElem = gsonProcessor.fromJson(serviceResponse, ScanInfo.class);
+                ScanInfo scanInforElem = gsonProcessor.fromJson(serviceResponse,
+                        ScanInfo.class);
                 scanInfo = new ScanInfo[]{scanInforElem};
             }
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
@@ -297,16 +381,22 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public FileScanReport[] getUrlScanReport(String[] urls, boolean scan) throws UnsupportedEncodingException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException {
+    public FileScanReport[] getUrlScanReport(String[] urls, boolean scan) throws
+            IOException, UnauthorizedAccessException,
+            QuotaExceededException, InvalidArguentsException {
         Response responseWrapper = new Response();
         FileScanReport[] fileScanReport = null;
         if (urls == null) {
-            throw new InvalidArguentsException("Incorrect parameter \'resources\', resource should be an array with at least one element");
+            String errMsg = String.format(ERR_MSG_INCORRECT_PARAM, "resources");
+            throw new InvalidArguentsException(errMsg);
         } else if (urls.length > VT2_MAX_ALLOWED_URLS_PER_REQUEST) {
-            throw new InvalidArguentsException("Incorrect parameter \'urls\' , maximum number(" + VT2_MAX_ALLOWED_URLS_PER_REQUEST + ") of urls per request has been exceeded.");
+            String errMsg = String.format(ERR_MSG2_INCORRECT_PARAM,
+                    "urls", VT2_MAX_ALLOWED_URLS_PER_REQUEST, "urls");
+            throw new InvalidArguentsException(errMsg);
         }
 
-        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
+        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD,
+                new StringBody(apiKey));
         StringBuilder resourceStr = new StringBuilder();
         for (String resource : urls) {
             resourceStr.append(resource).append("\n");
@@ -317,36 +407,44 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
             resourceStr.deleteCharAt(lastCommaIdx);
         }
 
-        MultiPartEntity part = new MultiPartEntity(RESOURCE_FIELD, new StringBody(resourceStr.toString()));
+        MultiPartEntity part = new MultiPartEntity(RESOURCE_FIELD,
+                new StringBody(resourceStr.toString()));
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(apikey);
         multiParts.add(part);
 
         if (scan) {
-            MultiPartEntity scanPart = new MultiPartEntity("scan", new StringBody("1"));
+            MultiPartEntity scanPart =
+                    new MultiPartEntity("scan", new StringBody("1"));
             multiParts.add(scanPart);
         }
-        HttpStatus httpStatus = new HttpStatus();
         Integer statusCode = -1;
 
         try {
-            responseWrapper = httpRequestObject.request(URI_VT2_URL_SCAN_REPORT, null, null, RequestMethod.POST, multiParts, httpStatus);
-            statusCode = httpStatus.getStatusCode();
-        } catch (IOException e) {
-            statusCode = httpStatus.getStatusCode();
+            responseWrapper = httpRequestObject.request(URI_VT2_URL_SCAN_REPORT,
+                    null, null, RequestMethod.POST, multiParts);
+            statusCode = responseWrapper.getStatus();
+        } catch (RequestNotComplete e) {
+            statusCode = e.getHttpStatus().getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
+                        e);
             }
+        } catch (IOException e) {
+            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
             if (urls.length > 1) {
-                fileScanReport = gsonProcessor.fromJson(serviceResponse, FileScanReport[].class);
+                fileScanReport = gsonProcessor.fromJson(serviceResponse,
+                        FileScanReport[].class);
             } else {
-                FileScanReport fileScanReportElem = gsonProcessor.fromJson(serviceResponse, FileScanReport.class);
+                FileScanReport fileScanReportElem =
+                        gsonProcessor.fromJson(serviceResponse,
+                                FileScanReport.class);
                 fileScanReport = new FileScanReport[]{fileScanReportElem};
             }
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
@@ -357,32 +455,41 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public IPAddressReport getIPAddresReport(String ipAddress) throws InvalidArguentsException, QuotaExceededException, UnauthorizedAccessException {
+    public IPAddressReport getIPAddresReport(String ipAddress) throws
+            InvalidArguentsException, QuotaExceededException,
+            UnauthorizedAccessException, IOException {
         Response responseWrapper = new Response();
         IPAddressReport ipReport = new IPAddressReport();
         if (ipAddress == null) {
-            throw new InvalidArguentsException("Incorrect parameter \'ipAddress\', it should be a valid IP address ");
+            String errMsg = String.format(ERR_MSG3_INCORRECT_PARAM,
+                    "ipAddress", "IP address");
+            throw new InvalidArguentsException(errMsg);
         }
 
-        String uriWithParams = URI_VT2_IP_REPORT + "?apikey=" + apiKey + "&ip=" + ipAddress;
-        HttpStatus httpStatus = new HttpStatus();
+        String uriWithParams = URI_VT2_IP_REPORT + "?apikey=" + apiKey + "&ip="
+                + ipAddress;
         Integer statusCode = -1;
 
         try {
-            responseWrapper = httpRequestObject.request(uriWithParams, null, null, RequestMethod.GET, null, httpStatus);
-            statusCode = httpStatus.getStatusCode();
-        } catch (IOException e) {
-            statusCode = httpStatus.getStatusCode();
+            responseWrapper = httpRequestObject.request(uriWithParams, null,
+                    null, RequestMethod.GET, null);
+            statusCode = responseWrapper.getStatus();
+        } catch (RequestNotComplete e) {
+            statusCode = e.getHttpStatus().getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
+                        e);
             }
+        } catch (IOException e) {
+            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
-            ipReport = gsonProcessor.fromJson(serviceResponse, IPAddressReport.class);
+            ipReport = gsonProcessor.fromJson(serviceResponse,
+                    IPAddressReport.class);
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
             throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
@@ -391,32 +498,41 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public DomainReport getDomainReport(String domain) throws InvalidArguentsException, UnauthorizedAccessException, QuotaExceededException {
+    public DomainReport getDomainReport(String domain) throws
+            InvalidArguentsException, UnauthorizedAccessException,
+            QuotaExceededException, IOException {
         Response responseWrapper = new Response();
         DomainReport domainReport = new DomainReport();
         if (domain == null) {
-            throw new InvalidArguentsException("Incorrect parameter \'domain\', it should be a valid domain name");
+            String errMsg = String.format(ERR_MSG3_INCORRECT_PARAM, "domain",
+                    "domain name");
+            throw new InvalidArguentsException(errMsg);
         }
 
-        String uriWithParams = URI_VT2_DOMAIN_REPORT + "?apikey=" + apiKey + "&domain=" + domain;
-        HttpStatus httpStatus = new HttpStatus();
+        String uriWithParams = URI_VT2_DOMAIN_REPORT + "?apikey=" +
+                apiKey + "&domain=" + domain;
         Integer statusCode = -1;
 
         try {
-            responseWrapper = httpRequestObject.request(uriWithParams, null, null, RequestMethod.GET, null, httpStatus);
-            statusCode = httpStatus.getStatusCode();
-        } catch (IOException e) {
-            statusCode = httpStatus.getStatusCode();
+            responseWrapper = httpRequestObject.request(uriWithParams, null,
+                    null, RequestMethod.GET, null);
+            statusCode = responseWrapper.getStatus();
+        } catch (RequestNotComplete e) {
+            statusCode = e.getHttpStatus().getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
+                        e);
             }
+        } catch (IOException e) {
+            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
-            domainReport = gsonProcessor.fromJson(serviceResponse, DomainReport.class);
+            domainReport = gsonProcessor.fromJson(serviceResponse,
+                    DomainReport.class);
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
             throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);
@@ -425,43 +541,54 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public GeneralResponse makeAComment(String resource, String comment) throws UnsupportedEncodingException, UnauthorizedAccessException, InvalidArguentsException, QuotaExceededException {
+    public GeneralResponse makeAComment(String resource, String comment) throws
+            IOException, UnauthorizedAccessException,
+            InvalidArguentsException, QuotaExceededException {
         if (resource == null || resource.length() == 0) {
-            throw new InvalidArguentsException("Incorrect parameter \'resource\', it should be a string representing a hash value (md2,sha1,sha256)");
+            String errMsg = String.format(ERR_MSG3_INCORRECT_PARAM,
+                    "resource", "string representing a hash value (md2,sha1," +
+                    "sha256)");
+            throw new InvalidArguentsException(errMsg);
         }
         Response responseWrapper = new Response();
 
         GeneralResponse generalResponse = new GeneralResponse();
         generalResponse.setResponseCode(-1);
-        generalResponse.setVerboseMessage("Could not publish the comment, API error occured!");
+        generalResponse.setVerboseMessage(ERR_COMMENTING);
 
-        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD, new StringBody(apiKey));
-        MultiPartEntity resourcePart = new MultiPartEntity(RESOURCE_FIELD, new StringBody(resource));
-        MultiPartEntity commentPart = new MultiPartEntity("comment", new StringBody(comment));
+        MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD,
+                new StringBody(apiKey));
+        MultiPartEntity resourcePart = new MultiPartEntity(RESOURCE_FIELD,
+                new StringBody(resource));
+        MultiPartEntity commentPart = new MultiPartEntity("comment",
+                new StringBody(comment));
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
         multiParts.add(apikey);
         multiParts.add(resourcePart);
         multiParts.add(commentPart);
-        List<FormData> formData = new ArrayList<FormData>();
 
-        HttpStatus httpStatus = new HttpStatus();
         Integer statusCode = -1;
 
         try {
-            responseWrapper = httpRequestObject.request(URI_VT2_PUT_COMMENT, null, null, RequestMethod.POST, multiParts, httpStatus);
-            statusCode = httpStatus.getStatusCode();
-        } catch (IOException e) {
-            statusCode = httpStatus.getStatusCode();
+            responseWrapper = httpRequestObject.request(URI_VT2_PUT_COMMENT,
+                    null, null, RequestMethod.POST, multiParts);
+            statusCode = responseWrapper.getStatus();
+        } catch (RequestNotComplete e) {
+            statusCode = e.getHttpStatus().getStatusCode();
             if (statusCode == VirustotalStatus.FORBIDDEN) {
                 //fobidden
-                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY, e);
+                throw new UnauthorizedAccessException(ERR_MSG_INVALID_API_KEY,
+                        e);
             }
+        } catch (IOException e) {
+            throw e;
         }
 
         if (statusCode == VirustotalStatus.SUCCESSFUL) {
             //valid response
             String serviceResponse = responseWrapper.getResponse();
-            generalResponse = gsonProcessor.fromJson(serviceResponse, GeneralResponse.class);
+            generalResponse = gsonProcessor.fromJson(serviceResponse,
+                    GeneralResponse.class);
         } else if (statusCode == VirustotalStatus.API_LIMIT_EXCEEDED) {
             //limit exceeded
             throw new QuotaExceededException(ERR_MSG_EXCEED_MAX_REQ_PM);

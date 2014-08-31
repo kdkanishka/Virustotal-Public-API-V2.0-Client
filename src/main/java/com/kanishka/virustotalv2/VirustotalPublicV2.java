@@ -15,6 +15,7 @@ import com.kanishka.virustotal.exception.UnauthorizedAccessException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -39,7 +40,7 @@ public interface VirustotalPublicV2 {
      * @param fileToScan the file object to be scanned
      * @return scan information
      */
-    ScanInfo scanFile(final File fileToScan) throws UnsupportedEncodingException, UnauthorizedAccessException, FileNotFoundException, QuotaExceededException;
+    ScanInfo scanFile(final File fileToScan) throws IOException, UnauthorizedAccessException, QuotaExceededException;
 
     /**
      * The call allows you to rescan files in VirusTotal's file store without having to resubmit them, thus saving bandwidth.
@@ -53,7 +54,7 @@ public interface VirustotalPublicV2 {
      *                  store.
      * @return
      */
-    ScanInfo[] reScanFiles(final String[] resources) throws UnsupportedEncodingException, UnauthorizedAccessException, InvalidArguentsException, QuotaExceededException;
+    ScanInfo[] reScanFiles(final String[] resources) throws IOException, UnauthorizedAccessException, InvalidArguentsException, QuotaExceededException;
 
     /**
      * Returns the detailed most reason scan report for a given resource
@@ -64,7 +65,7 @@ public interface VirustotalPublicV2 {
      *                 specific report.
      * @return
      */
-    FileScanReport getScanReport(final String resource) throws UnsupportedEncodingException, UnauthorizedAccessException, QuotaExceededException;
+    FileScanReport getScanReport(final String resource) throws IOException, UnauthorizedAccessException, QuotaExceededException;
 
     /**
      * Returns the detailed most reason scan reports for given set of resources
@@ -73,7 +74,7 @@ public interface VirustotalPublicV2 {
      *                  this allows you to perform a batch request with one single call.
      * @return
      */
-    FileScanReport[] getScanReports(final String[] resources) throws UnsupportedEncodingException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException;
+    FileScanReport[] getScanReports(final String[] resources) throws IOException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException;
 
     /**
      * URLs can also be submitted for scanning. Once again, before performing your submission we encourage you to retrieve
@@ -82,7 +83,7 @@ public interface VirustotalPublicV2 {
      * @param urls set of urls to be scanned
      * @return
      */
-    ScanInfo[] scanUrls(final String[] urls) throws UnsupportedEncodingException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException;
+    ScanInfo[] scanUrls(final String[] urls) throws IOException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException;
 
     /**
      * Returns the detailed scan report for given set of urls
@@ -91,7 +92,7 @@ public interface VirustotalPublicV2 {
      * @param scan true if url s must be scanned before generating the report
      * @return
      */
-    FileScanReport[] getUrlScanReport(final String[] url, boolean scan) throws UnsupportedEncodingException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException;
+    FileScanReport[] getUrlScanReport(final String[] url, boolean scan) throws IOException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException;
 
     /**
      * Returns detailed report for a given IP
@@ -99,7 +100,7 @@ public interface VirustotalPublicV2 {
      * @param ipAddress a valid IPv4 address in dotted quad notation, for the time being only IPv4 addresses are supported.
      * @return
      */
-    IPAddressReport getIPAddresReport(final String ipAddress) throws InvalidArguentsException, QuotaExceededException, UnauthorizedAccessException;
+    IPAddressReport getIPAddresReport(final String ipAddress) throws InvalidArguentsException, QuotaExceededException, UnauthorizedAccessException, IOException;
 
     /**
      * Returns a detailed report for a given domain
@@ -107,7 +108,7 @@ public interface VirustotalPublicV2 {
      * @param domain domain name
      * @return
      */
-    DomainReport getDomainReport(final String domain) throws InvalidArguentsException, UnauthorizedAccessException, QuotaExceededException;
+    DomainReport getDomainReport(final String domain) throws InvalidArguentsException, UnauthorizedAccessException, QuotaExceededException, IOException;
 
     /**
      * @param resource either a md5/sha1/sha256 hash of the file you want to review or the URL itself that you want to comment on.
@@ -115,5 +116,5 @@ public interface VirustotalPublicV2 {
      *                 and reference users using the "@" syntax (e.g. @VirusTotalTeam).
      * @return
      */
-    GeneralResponse makeAComment(final String resource, final String comment) throws UnsupportedEncodingException, UnauthorizedAccessException, InvalidArguentsException, QuotaExceededException;
+    GeneralResponse makeAComment(final String resource, final String comment) throws IOException, UnauthorizedAccessException, InvalidArguentsException, QuotaExceededException;
 }

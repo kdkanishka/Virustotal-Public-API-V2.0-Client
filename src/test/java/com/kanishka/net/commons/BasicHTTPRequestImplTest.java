@@ -5,19 +5,23 @@
 package com.kanishka.net.commons;
 
 import com.google.gson.Gson;
+import com.kanishka.net.exception.RequestNotComplete;
 import com.kanishka.net.model.FormData;
 import com.kanishka.net.model.Header;
-import com.kanishka.net.model.HttpStatus;
 import com.kanishka.net.model.RequestMethod;
 import com.kanishka.net.model.Response;
 import httpbin.HttpBinResponse;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -53,11 +57,10 @@ public class BasicHTTPRequestImplTest {
         String arg1 = "val1";
         String arg2 = "val2";
         String uri = "http://httpbin.org/get?arg1=" + arg1 + "&arg2=" + arg2;
-        HttpStatus httpStatus = new HttpStatus();
 
         Response responseWrapper = request.request(uri, null, null,
-                RequestMethod.GET, null, httpStatus);
-        assertTrue(httpStatus.getStatusCode() == HTTP_OK);
+                RequestMethod.GET, null);
+        assertTrue(responseWrapper.getStatus() == HTTP_OK);
         assertTrue(responseWrapper.getResponse().length() > 0);
         HttpBinResponse httpBinRespObj =
                 gsonParser.fromJson(responseWrapper.getResponse(),
@@ -81,12 +84,11 @@ public class BasicHTTPRequestImplTest {
         List<Header> requestHeaders = new ArrayList<Header>();
         requestHeaders.add(new Header("Header1", header1));
         requestHeaders.add(new Header("Header2", header2));
-        HttpStatus httpStatus = new HttpStatus();
 
         Response responseWrapper = request.request(uri, requestHeaders, null,
-                RequestMethod.GET, null, httpStatus);
+                RequestMethod.GET, null);
         String response = responseWrapper.getResponse();
-        assertTrue(httpStatus.getStatusCode() == HTTP_OK);
+        assertTrue(responseWrapper.getStatus() == HTTP_OK);
         assertTrue(response.length() > 0);
         HttpBinResponse httpBinRespObj = gsonParser.fromJson(response,
                 HttpBinResponse.class);
@@ -107,12 +109,11 @@ public class BasicHTTPRequestImplTest {
         List<FormData> formData = new ArrayList<FormData>();
         formData.add(new FormData("formdata1", formdata1));
         formData.add(new FormData("formdata2", formdata2));
-        HttpStatus httpStatus = new HttpStatus();
 
         Response responseWrapper = request.request(uri, null, formData,
-                RequestMethod.POST, null, httpStatus);
+                RequestMethod.POST, null);
         String response = responseWrapper.getResponse();
-        assertTrue(httpStatus.getStatusCode() == HTTP_OK);
+        assertTrue(responseWrapper.getStatus() == HTTP_OK);
         assertTrue(response.length() > 0);
         HttpBinResponse httpBinRespObj = gsonParser.fromJson(response,
                 HttpBinResponse.class);
@@ -137,12 +138,11 @@ public class BasicHTTPRequestImplTest {
         List<FormData> formData = new ArrayList<FormData>();
         formData.add(new FormData("formdata1", formdata1));
         formData.add(new FormData("formdata2", formdata2));
-        HttpStatus httpStatus = new HttpStatus();
 
         Response responseWrapper = request.request(uri, requestHeaders,
-                formData, RequestMethod.POST, null, httpStatus);
+                formData, RequestMethod.POST, null);
         String response = responseWrapper.getResponse();
-        assertTrue(httpStatus.getStatusCode() == HTTP_OK);
+        assertTrue(responseWrapper.getStatus() == HTTP_OK);
         assertTrue(response.length() > 0);
         HttpBinResponse httpBinRespObj = gsonParser.fromJson(response,
                 HttpBinResponse.class);
@@ -150,5 +150,27 @@ public class BasicHTTPRequestImplTest {
         assertEquals(httpBinRespObj.getHeaders().get("Header2"), header2);
         assertEquals(httpBinRespObj.getForm().get("formdata1"), formdata1);
         assertEquals(httpBinRespObj.getForm().get("formdata2"), formdata2);
+    }
+
+    @Test
+    public final void testUnauthorizedGetRequest() throws IOException,
+            RequestNotComplete {
+        try{
+        BasicHTTPRequestImpl request = new BasicHTTPRequestImpl();
+        String uri = "http://httpbin.org/basic-auth/user/passwd";
+
+        Response responseWrapper = request.request(uri, null, null,
+                RequestMethod.GET, null);
+        assertTrue(responseWrapper.getStatus() == HTTP_OK);
+        assertTrue(responseWrapper.getResponse().length() > 0);
+        HttpBinResponse httpBinRespObj =
+                gsonParser.fromJson(responseWrapper.getResponse(),
+                        HttpBinResponse.class);
+        assertTrue(httpBinRespObj.getOrigin().length() > 0);
+        }catch (RequestNotComplete e){
+            assertEquals(e.getHttpStatus().getStatusCode(),
+                    HttpURLConnection.HTTP_UNAUTHORIZED);
+            assertEquals(e.getHttpStatus().getMessage(), "UNAUTHORIZED");
+        }
     }
 }
