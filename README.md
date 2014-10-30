@@ -1,4 +1,4 @@
-Virustotal-Public-API-V2.0-Client [![Build Status](https://api.travis-ci.org/kdkanishka/Virustotal-Public-API-V2.0-Client.png)](https://travis-ci.org/kdkanishka/Virustotal-Public-API-V2.0-Client)
+Virustotal-Public-API-V2.0-Client [![Build Status](https://api.travis-ci.org/kdkanishka/Virustotal-Public-API-V2.0-Client.png)](https://travis-ci.org/kdkanishka/Virustotal-Public-API-V2.0-Client)[![Coverage Status](https://coveralls.io/repos/kdkanishka/Virustotal-Public-API-V2.0-Client/badge.png)](https://coveralls.io/r/kdkanishka/Virustotal-Public-API-V2.0-Client)
 =================================
 
 
