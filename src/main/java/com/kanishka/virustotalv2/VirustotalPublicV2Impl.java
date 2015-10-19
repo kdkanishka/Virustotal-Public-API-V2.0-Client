@@ -26,6 +26,7 @@ import org.apache.http.entity.mime.content.StringBody;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,6 +80,17 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         initialize();
         httpRequestObject = new BasicHTTPRequestImpl();
     }
+
+    public VirustotalPublicV2Impl(String host, Integer port) throws APIKeyNotFoundException {
+        initialize();
+        httpRequestObject = new BasicHTTPRequestImpl(new InetSocketAddress(host, port));
+    }
+
+    public VirustotalPublicV2Impl(InetSocketAddress proxy) throws APIKeyNotFoundException {
+        initialize();
+        httpRequestObject = new BasicHTTPRequestImpl(proxy);
+    }
+
 
     public VirustotalPublicV2Impl(HTTPRequest httpRequestObject) throws
             APIKeyNotFoundException {
