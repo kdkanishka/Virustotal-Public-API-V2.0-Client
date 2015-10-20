@@ -20,9 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,8 +31,13 @@ import java.util.Map;
  */
 public class BasicHTTPRequestImpl implements HTTPRequest {
 
+    InetSocketAddress proxy = null;
+
     public BasicHTTPRequestImpl() {
 
+    }
+    public BasicHTTPRequestImpl(InetSocketAddress proxy){
+        this.proxy = proxy;
     }
 
     @Override
@@ -50,7 +53,14 @@ public class BasicHTTPRequestImpl implements HTTPRequest {
         Response responseWrapper;
 
         URL urlObj = new URL(url);
-        HttpURLConnection conn = (HttpURLConnection) urlObj.openConnection();
+        HttpURLConnection conn;
+
+        if (proxy != null){
+            conn  = (HttpURLConnection) urlObj.openConnection(new Proxy(Proxy.Type.HTTP, proxy));
+        }else{
+            conn  = (HttpURLConnection) urlObj.openConnection();
+        }
+
         conn.setRequestMethod(requestMethod.toString());
 
         setRequestHeaders(reqHeaders, conn);
