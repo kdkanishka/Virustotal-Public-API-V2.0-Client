@@ -28,7 +28,7 @@ Getting started
       <version>1.1.GA-SNAPSHOT</version>
 </dependency>
 ```
-* If your project is not maven based, add `target/VirustotalPublicV2.0-1.1.GA-SNAPSHOT-jar-with-dependencies.jar` file to your class path.
+* If your project is not maven based, add `target/VirustotalPublicV2.0-1.1.rB-SNAPSHOT-jar-with-dependencies.jar` file to your class path.
 
 How to use API
 ---------------------
@@ -413,11 +413,11 @@ mvn clean test -Psystem-tests
 ```
 
 ### Support or Contact
-Having trouble with this api ? contact kdkanishka@gmail.com and I'll help you to sort it out.
+Having trouble with this API ? contact kdkanishka@gmail.com and I'll help you to sort it out.
 
 ### Contribute to this Project
 You are welcome to suggest new features and improvements. please feel free to fork and make pull requests with your additions and improvements. 
 
-[JDK 1.5 or higher version]:http://www.oracle.com/technetwork/java/javase/downloads/index.html
-[Apache Maven 3.x]:http://maven.apache.org
+[JDK 1.5 or higher version]:https://www.oracle.com/technetwork/java/javase/downloads/index.html
+[Apache Maven 3.x]:https://maven.apache.org
 [Download]:https://github.com/kdkanishka/Virustotal-Public-API-V2.0-Client/archive/master.zip
