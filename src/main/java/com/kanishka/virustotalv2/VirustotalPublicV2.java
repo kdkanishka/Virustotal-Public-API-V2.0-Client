@@ -78,19 +78,37 @@ public interface VirustotalPublicV2 {
      * URLs can also be submitted for scanning. Once again, before performing your submission we encourage you to retrieve
      * the latest report on the URL, if it is recent enough you might want to save time and bandwidth by making use of it.
      *
+     * @param url a url to be scanned
+     * @return
+     */
+    ScanInfo scanUrl(final String url) throws IOException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException;
+
+    /**
+     * URLs can also be submitted for scanning. Once again, before performing your submission we encourage you to retrieve
+     * the latest report on the URL, if it is recent enough you might want to save time and bandwidth by making use of it.
+     *
      * @param urls set of urls to be scanned
      * @return
      */
     ScanInfo[] scanUrls(final String[] urls) throws IOException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException;
 
     /**
-     * Returns the detailed scan report for given set of urls
+     * Returns the detailed scan report for a given url
      *
-     * @param url  set of urls
+     * @param url  a url
      * @param scan true if url s must be scanned before generating the report
      * @return
      */
-    FileScanReport[] getUrlScanReport(final String[] url, boolean scan) throws IOException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException;
+    FileScanReport getUrlScanReport(final String url, boolean scan) throws IOException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException;
+
+    /**
+     * Returns the detailed scan report for given set of urls
+     *
+     * @param urls set of urls
+     * @param scan true if url s must be scanned before generating the report
+     * @return
+     */
+    FileScanReport[] getUrlsScanReport(final String[] urls, boolean scan) throws IOException, UnauthorizedAccessException, QuotaExceededException, InvalidArguentsException;
 
     /**
      * Returns detailed report for a given IP

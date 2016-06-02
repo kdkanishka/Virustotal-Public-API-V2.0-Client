@@ -318,6 +318,14 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
+    public ScanInfo scanUrl(String url) throws IOException,
+    UnauthorizedAccessException, QuotaExceededException,
+    InvalidArguentsException {
+    	final String[] urls = { url };
+    	return scanUrls(urls)[0];
+    }
+
+    @Override
     public ScanInfo[] scanUrls(String[] urls) throws IOException,
             UnauthorizedAccessException, QuotaExceededException,
             InvalidArguentsException {
@@ -382,7 +390,15 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     }
 
     @Override
-    public FileScanReport[] getUrlScanReport(String[] urls, boolean scan) throws
+    public FileScanReport getUrlScanReport(final String url, boolean scan) throws
+            IOException, UnauthorizedAccessException,
+            QuotaExceededException, InvalidArguentsException {
+    	final String[] urls = { url };
+    	return getUrlsScanReport(urls, scan)[0];
+    }
+
+    @Override
+    public FileScanReport[] getUrlsScanReport(final String[] urls, boolean scan) throws
             IOException, UnauthorizedAccessException,
             QuotaExceededException, InvalidArguentsException {
         Response responseWrapper = new Response();
