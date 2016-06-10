@@ -4,27 +4,25 @@
  */
 package com.kanishka.net.commons;
 
-import com.google.gson.Gson;
-import com.kanishka.net.exception.RequestNotComplete;
-import com.kanishka.net.model.FormData;
-import com.kanishka.net.model.Header;
-import com.kanishka.net.model.RequestMethod;
-import com.kanishka.net.model.Response;
+import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import httpbin.HttpBinResponse;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.google.gson.Gson;
+import com.kanishka.net.exception.RequestNotComplete;
+import com.kanishka.net.model.FormData;
+import com.kanishka.net.model.Header;
+import com.kanishka.net.model.RequestMethod;
+import com.kanishka.net.model.Response;
 
 /**
  * @author kdkanishka@gmail.com
