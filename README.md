@@ -18,7 +18,7 @@ Getting started
 2. OR [Download] the project as a zip file and extract
  - `https://github.com/kdkanishka/Virustotal-Public-API-V2.0-Client/archive/master.zip`
 3. Build and install the project using maven
- - `mvn clean compile assembly:single -DskipTests`
+ - `mvn clean install -DskipTests`
 4. Add following dependency to your maven project
 
 ``` xml
