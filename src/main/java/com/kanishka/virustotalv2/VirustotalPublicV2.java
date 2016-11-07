@@ -15,6 +15,7 @@ import com.kanishka.virustotal.exception.UnauthorizedAccessException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author kdkanishka@gmail.com
@@ -39,6 +40,14 @@ public interface VirustotalPublicV2 {
      * @return scan information
      */
     ScanInfo scanFile(final File fileToScan) throws IOException, UnauthorizedAccessException, QuotaExceededException;
+
+    /**
+     * Scan a given single file from an input stream
+     *
+     * @param fileToScan the file object to be scanned from the InputStream
+     * @return scan information
+     */
+    ScanInfo scanFile(final InputStream fileToScan) throws IOException, UnauthorizedAccessException, QuotaExceededException;
 
     /**
      * The call allows you to rescan files in VirusTotal's file store without having to resubmit them, thus saving bandwidth.
