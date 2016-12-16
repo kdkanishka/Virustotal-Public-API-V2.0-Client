@@ -122,7 +122,7 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
         InputStream inputStream = null;
         try {
            inputStream = new FileInputStream(fileToScan);
-           scanInfo = scanFile(inputStream);
+           scanInfo = scanFile(inputStream, fileToScan.getName());
         }
         finally {
             if (inputStream != null) {
@@ -137,10 +137,17 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     public ScanInfo scanFile(InputStream inputStream) throws
         IOException, UnauthorizedAccessException,
         QuotaExceededException {
+      return scanFile(inputStream, null);
+    }
+
+    @Override
+    public ScanInfo scanFile(InputStream inputStream, String fileName) throws
+        IOException, UnauthorizedAccessException,
+        QuotaExceededException {
         Response responseWrapper = new Response();
         ScanInfo scanInfo = new ScanInfo();
 
-        InputStreamBody inputStreamBody = new InputStreamBody(inputStream, ContentType.APPLICATION_OCTET_STREAM.toString(), null);
+        InputStreamBody inputStreamBody = new InputStreamBody(inputStream, ContentType.APPLICATION_OCTET_STREAM.toString(), fileName != null ? fileName : "file");
         MultiPartEntity file = new MultiPartEntity("file", inputStreamBody);
         MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD,
                 new StringBody(apiKey));

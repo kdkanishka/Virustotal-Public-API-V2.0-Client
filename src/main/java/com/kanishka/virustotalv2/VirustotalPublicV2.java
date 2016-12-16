@@ -50,6 +50,15 @@ public interface VirustotalPublicV2 {
     ScanInfo scanFile(final InputStream fileToScan) throws IOException, UnauthorizedAccessException, QuotaExceededException;
 
     /**
+     * Scan a given single file from an input stream
+     *
+     * @param fileToScan the file object to be scanned from the InputStream
+     * @param fileName the name of the file to be scanned
+     * @return scan information
+     */
+    ScanInfo scanFile(final InputStream fileToScan, String fileName) throws IOException, UnauthorizedAccessException, QuotaExceededException;
+
+    /**
      * The call allows you to rescan files in VirusTotal's file store without having to resubmit them, thus saving bandwidth.
      * <p/>
      * The VirusTotal public API allows you to rescan files that you or other users already sent in the past and, hence,
