@@ -20,12 +20,17 @@ import com.kanishka.virustotal.exception.APIKeyNotFoundException;
 import com.kanishka.virustotal.exception.InvalidArguentsException;
 import com.kanishka.virustotal.exception.QuotaExceededException;
 import com.kanishka.virustotal.exception.UnauthorizedAccessException;
+
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.entity.mime.content.StringBody;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,14 +115,40 @@ public class VirustotalPublicV2Impl implements VirustotalPublicV2 {
     public ScanInfo scanFile(File fileToScan) throws
             IOException, UnauthorizedAccessException,
             QuotaExceededException {
+        ScanInfo scanInfo = new ScanInfo();
         if (!fileToScan.canRead()) {
             throw new FileNotFoundException(ERR_MSG_FILE_NOT_FOUND);
         }
+        InputStream inputStream = null;
+        try {
+           inputStream = new FileInputStream(fileToScan);
+           scanInfo = scanFile(inputStream, fileToScan.getName());
+        }
+        finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+
+        return  scanInfo;
+    }
+
+    @Override
+    public ScanInfo scanFile(InputStream inputStream) throws
+        IOException, UnauthorizedAccessException,
+        QuotaExceededException {
+      return scanFile(inputStream, null);
+    }
+
+    @Override
+    public ScanInfo scanFile(InputStream inputStream, String fileName) throws
+        IOException, UnauthorizedAccessException,
+        QuotaExceededException {
         Response responseWrapper = new Response();
         ScanInfo scanInfo = new ScanInfo();
 
-        FileBody fileBody = new FileBody(fileToScan);
-        MultiPartEntity file = new MultiPartEntity("file", fileBody);
+        InputStreamBody inputStreamBody = new InputStreamBody(inputStream, ContentType.APPLICATION_OCTET_STREAM.toString(), fileName != null ? fileName : "file");
+        MultiPartEntity file = new MultiPartEntity("file", inputStreamBody);
         MultiPartEntity apikey = new MultiPartEntity(API_KEY_FIELD,
                 new StringBody(apiKey));
         List<MultiPartEntity> multiParts = new ArrayList<MultiPartEntity>();
