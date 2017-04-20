@@ -11,6 +11,7 @@ import com.kanishka.net.model.HttpStatus;
 import com.kanishka.net.model.MultiPartEntity;
 import com.kanishka.net.model.RequestMethod;
 import com.kanishka.net.model.Response;
+import com.kanishka.virustotalv2.VirusTotalConfig;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 
@@ -31,7 +32,7 @@ import java.util.Map;
  */
 public class BasicHTTPRequestImpl implements HTTPRequest {
 
-    InetSocketAddress proxy = null;
+    InetSocketAddress proxy = VirusTotalConfig.getConfigInstance().getProxy();
 
     public BasicHTTPRequestImpl() {
 

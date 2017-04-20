@@ -4,6 +4,8 @@
  */
 package com.kanishka.virustotalv2;
 
+import java.net.InetSocketAddress;
+
 /**
  * Configuration singleton which allows to maintain configurations
  * @author kdkanishka@gmail.com
@@ -12,6 +14,7 @@ public final class VirusTotalConfig {
 
     private String virusTotalAPIKey;
     private static VirusTotalConfig configInstance = null;
+    private InetSocketAddress proxy = null;
 
     private VirusTotalConfig() {
         virusTotalAPIKey = "";
@@ -36,4 +39,11 @@ public final class VirusTotalConfig {
         this.virusTotalAPIKey = virusTotalAPIKey;
     }
 
+    public InetSocketAddress getProxy() {
+        return proxy;
+    }
+
+    public void setProxy(InetSocketAddress proxy) {
+        this.proxy = proxy;
+    }
 }
